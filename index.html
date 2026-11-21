@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ATS-APP - Apna Technical Services</title>
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#003399">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background-color: #f1f5f9;
+            color: #0f172a;
+        }
+
+        header {
+            background: linear-gradient(135deg, #003399, #001a4d);
+            color: #ffdd00;
+            padding: 16px 14px;
+            text-align: center;
+            border-bottom: 4px solid #ffdd00;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 21px;
+            letter-spacing: 0.5px;
+        }
+
+        header p {
+            margin: 6px 0 0;
+            font-size: 12px;
+            color: #ffffff;
+        }
+
+        .container {
+            max-width: 520px;
+            margin: 0 auto;
+            padding: 14px 14px 85px;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            border-top: 4px solid #003399;
+        }
+
+        .card h2 {
+            margin: 0 0 12px;
+            font-size: 18px;
+            color: #003399;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 8px;
+        }
+
+        .top-bar {
+            background: #eff4ff;
+            border: 1.5px solid #003399;
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 14px;
+        }
+
+        .role-switch {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .role-btn {
+            padding: 10px;
+            border-radius: 8px;
+            border: 1.5px solid #003399;
+            background: #ffffff;
+            color: #003399;
+            font-weight: 700;
+            font-size: 13.5px;
+            cursor: pointer;
+        }
+
+        .role-btn.active {
+            background: #003399;
+            color: #ffdd00;
+        }
+
+        .account-status {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .account-info {
+            font-size: 13px;
+            font-weight: 600;
+            color: #002b80;
+        }
+
+        .google-signin-box,
+        .tech-login-box {
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .service-card {
+            background: #eff4ff;
+            border: 1.5px solid #003399;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 8px;
+            transition: 0.2s ease;
+        }
+
+        .service-card.selected {
+            background: #fef9c3;
+            border-color: #ca8a04;
+        }
+
+        .service-photo {
+            width: 100%;
+            height: 105px;
+            object-fit: cover;
+            border-radius: 8px;
+            background: #dbeafe;
+            border: 1px solid #bfdbfe;
+            display: block;
+        }
+
+        .service-title {
+            font-weight: 700;
+            font-size: 13.5px;
+            color: #002b80;
+        }
+
+        .book-service-btn {
+            background: #003399;
+            color: #ffdd00;
+            border: none;
+            border-radius: 6px;
+            padding: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .book-service-btn:hover {
+            background: #002266;
+        }
+
+        label {
+            display: block;
+            margin: 11px 0 5px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 14px;
+            background: #ffffff;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #003399;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .btn-sm {
+            width: auto;
+            margin-top: 0;
+            padding: 7px 12px;
+            font-size: 12.5px;
+        }
+
+        .btn-blue {
+            background: #003399;
+            color: #ffdd00;
+        }
+
+        .btn-green {
+            background: #16a34a;
+            color: #ffffff;
+        }
+
+        .btn-red {
+            background: #dc2626;
+            color: #ffffff;
+        }
+
+        .btn-location {
+            background: #ea580c;
+            color: #ffffff;
+            font-size: 13px;
+            padding: 9px;
+        }
+
+        .btn-gray {
+            background: #475569;
+            color: #ffffff;
+        }
+
+        #locationStatus {
+            font-size: 12px;
+            margin: 6px 0 0;
+            min-height: 16px;
+        }
+
+        .payment-box {
+            background: #fef9c3;
+            border: 1.5px dashed #ca8a04;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 14px;
+        }
+
+        .upi-link {
+            display: inline-block;
+            text-decoration: none;
+            margin-top: 8px;
+        }
+
+        .tech-manage-box {
+            background: #eff4ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 14px;
+        }
+
+        .tech-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .tech-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #ffffff;
+            border: 1px solid #93c5fd;
+            border-radius: 20px;
+            padding: 5px 10px;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: #002b80;
+        }
+
+        .chip-del-btn {
+            border: none;
+            background: #fee2e2;
+            color: #b91c1c;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .job-card {
+            background: #f8fafc;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 12px;
+            margin-top: 12px;
+            font-size: 13.5px;
+            line-height: 1.5;
+        }
+
+        .job-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 11.5px;
+            font-weight: 700;
+            background: #dbeafe;
+            color: #003399;
+        }
+
+        .stars {
+            font-size: 26px;
+            color: #cbd5e1;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .stars span.active {
+            color: #f59e0b;
+        }
+
+        .review-item {
+            margin-top: 10px;
+            font-size: 13px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 10px;
+            border-radius: 8px;
+            line-height: 1.45;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #003399;
+            display: flex;
+            justify-content: space-around;
+            padding: 11px 4px;
+            border-top: 2px solid #ffdd00;
+            z-index: 100;
+        }
+
+        .bottom-nav a {
+            color: #ffdd00;
+            text-decoration: none;
+            font-size: 12.5px;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>ATS-APP</h1>
+    <p>Apna Technical Services • Khagaria • Beldour • Alamnagar Khuran • Maheskut</p>
+</header>
+
+<div class="container">
+
+    <!-- Customer / Technician Mode Switch + Google Sign-In -->
+    <div class="top-bar">
+        <div class="role-switch">
+            <button type="button" class="role-btn active" id="btnCustomerMode" onclick="switchMode('customer')">Customer Mode</button>
+            <button type="button" class="role-btn" id="btnTechMode" onclick="switchMode('technician')">Technician Mode</button>
+        </div>
+
+        <div class="account-status">
+            <div class="account-info" id="googleStatusText">Google Account: Signed Out</div>
+            <button type="button" class="btn btn-blue btn-sm" id="toggleGoogleBtn" onclick="toggleGooglePanel()">Google Sign-In</button>
+        </div>
+
+        <div class="google-signin-box" id="googleSignInPanel" style="display: none;">
+            <div id="realGoogleBtn"></div>
+            <input type="text" id="googleAccountName" placeholder="Google Profile Name">
+            <input type="email" id="googleAccountEmail" placeholder="Google Gmail">
+            <button type="button" class="btn btn-green btn-sm" onclick="completeGoogleSignIn()">Continue with Google</button>
+        </div>
+    </div>
+
+    <!-- CUSTOMER SECTION -->
+    <div id="customerSection">
+
+        <div class="card" id="services">
+            <h2>All Services — Photo & Booking</h2>
+            <div class="services-grid">
+
+                <div class="service-card" data-service="Cooler Repair">
+                    <img class="service-photo" alt="Cooler Repair" src="https://images.unsplash.com/photo-1585338107529-13afc5f02586?auto=format&fit=crop&w=400&q=80">
+                    <div class="service-title">Cooler Repair</div>
+                    <button type="button" class="book-service-btn" onclick="openBookingForService('Cooler Repair')">Book Now</button>
+                </div>
+
+                <div class="service-card" data-service="Fridge & Freezer">
+                    <img class="service-photo" alt="Fridge & Freezer" src="https://images.unsplash.com/photo-1584568694244-14fbdf83bd30?auto=format&fit=crop&w=400&q=80">
+                    <div class="service-title">Fridge & Freezer</div>
+                    <button type="button" class="book-service-btn" onclick="openBookingForService('Fridge & Freezer')">Book Now</button>
+                </div>
+
+                <div class="service-card" data-service="LED TV Repair">
+                    <img class="service-photo" alt="LED TV Repair" src="https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&w=400&q=80">
+                    <div class="service-title">LED TV Repair</div>
+                    <button type="button" class="book-service-btn" onclick="openBookingForService('LED TV Repair')">Book Now</button>
+                </div>
+
+                <div class="service-card" data-service="AC Service & Repair">
+                    <img class="service-photo" alt="AC Service & Repair" src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=400&q=80">
+                    <div class="service-title">AC Service & Repair</div>
+                    <button type="button" class="book-service-btn" onclick="openBookingForService('AC Service & Repair')">Book Now</button>
+                </div>
+
+                <div class="service-card" data-service="DTH Installation & Repair">
+                    <img class="service-photo" alt="DTH Installation & Repair" src="https://images.unsplash.com/photo-1544724569-5f546fd6f2b5?auto=format&fit=crop&w=400&q=80">
+                    <div class="service-title">DTH Service</div>
+                    <button type="button" class="book-service-btn" onclick="openBookingForService('DTH Installation & Repair')">Book Now</button>
+                </div>
+
+                <div class="service-card" data-service="Washing Machine Repair">
+                    <img class="service-photo" alt="Washing Machine Repair" src="https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?auto=format&fit=crop&w=400&q=80">
+                    <div class="service-title">Washing Machine</div>
+                    <button type="button" class="book-service-btn" onclick="openBookingForService('Washing Machine Repair')">Book Now</button>
+                </div>
+
+                <div class="service-card" data-service="CCTV Installation & Repair">
+                    <img class="service-photo" alt="CCTV Installation & Repair" src="https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&w=400&q=80">
+                    <div class="service-title">CCTV Camera</div>
+                    <button type="button" class="book-service-btn" onclick="openBookingForService('CCTV Installation & Repair')">Book Now</button>
+                </div>
+
+                <div class="service-card" data-service="Inverter & Battery">
+                    <img class="service-photo" alt="Inverter & Battery" src="https://images.unsplash.com/photo-1620714223084-8fcacc6dfd8d?auto=format&fit=crop&w=400&q=80">
+                    <div class="service-title">Inverter & Battery</div>
+                    <button type="button" class="book-service-btn" onclick="openBookingForService('Inverter & Battery')">Book Now</button>
+                </div>
+
+                <div class="service-card" data-service="Bijli Repair & Wiring">
+                    <img class="service-photo" alt="Bijli Repair & Wiring" src="https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&w=400&q=80">
+                    <div class="service-title">Bijli Repair & Wiring</div>
+                    <button type="button" class="book-service-btn" onclick="openBookingForService('Bijli Repair & Wiring')">Book Now</button>
+                </div>
+
+                <div class="service-card" data-service="Putty & Painting">
+                    <img class="service-photo" alt="Putty & Painting" src="https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=400&q=80">
+                    <div class="service-title">Putty & Painting</div>
+                    <button type="button" class="book-service-btn" onclick="openBookingForService('Putty & Painting')">Book Now</button>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="card" id="booking">
+            <h2>Order Booking Form</h2>
+
+            <label for="selectedService">Service Chunein</label>
+            <select id="selectedService" onchange="highlightServiceCard()">
+                <option value="">-- Service Chunein --</option>
+                <option value="Cooler Repair">Cooler Repair</option>
+                <option value="Fridge & Freezer">Fridge & Freezer</option>
+                <option value="LED TV Repair">LED TV Repair</option>
+                <option value="AC Service & Repair">AC Service & Repair</option>
+                <option value="DTH Installation & Repair">DTH Installation & Repair</option>
+                <option value="Washing Machine Repair">Washing Machine Repair</option>
+                <option value="CCTV Installation & Repair">CCTV Installation & Repair</option>
+                <option value="Inverter & Battery">Inverter & Battery</option>
+                <option value="Bijli Repair & Wiring">Bijli Repair & Wiring</option>
+                <option value="Putty & Painting">Putty & Painting</option>
+            </select>
+
+            <label for="problemNote">Kya Kharab Hai? (Optional)</label>
+            <input type="text" id="problemNote" placeholder="Jaise: Cooler motor/pump nahi chal raha, TV display band hai">
+
+            <label for="custName">Aapka Naam</label>
+            <input type="text" id="custName" placeholder="Apna naam likhein">
+
+            <label for="custEmail">Google Gmail ID (Optional)</label>
+            <input type="email" id="custEmail" placeholder="Aapka Gmail address">
+
+            <label for="custPhone">Mobile Number</label>
+            <input type="tel" id="custPhone" placeholder="10 digit mobile number" maxlength="10">
+
+            <label for="branch">Branch Chunein</label>
+            <select id="branch">
+                <option value="Khagaria (Main Branch)">Khagaria (Main Branch)</option>
+                <option value="Beldour">Beldour</option>
+                <option value="Alamnagar Khuran">Alamnagar Khuran</option>
+                <option value="Maheskut">Maheskut</option>
+            </select>
+
+            <label for="address">Address / Live Location</label>
+            <textarea id="address" rows="2" placeholder="Pura pata likhein ya Live Location button dabayein"></textarea>
+            <button type="button" class="btn btn-location" onclick="getLiveLocation()">Live Location Track Karein</button>
+            <p id="locationStatus"></p>
+
+            <label for="bookingTime">Booking Date & Time</label>
+            <input type="datetime-local" id="bookingTime">
+
+            <div class="payment-box">
+                <strong>Online Payment Mode</strong>
+                <select id="paymentMode" onchange="toggleUPI()" style="margin-top: 8px;">
+                    <option value="Cash After Service">Cash After Service</option>
+                    <option value="Online UPI Payment">Online UPI Payment</option>
+                </select>
+
+                <div id="upiSection" style="display: none;">
+                    <p style="font-size: 13px; margin: 10px 0 4px;">Visiting Charge: <b>₹199</b></p>
+                    <a href="upi://pay?pa=manishkumarkgg181@ybl&pn=ATS-APP&am=199&cu=INR" class="btn btn-blue upi-link">
+                        Pay ₹199 via UPI App
+                    </a>
+                    <p style="font-size: 11.5px; color: #475569; margin: 6px 0 0;">
+                        UPI ID: <b>manishkumarkgg181@ybl</b><br>
+                        Payment ke baad niche WhatsApp Order Confirm karein.
+                    </p>
+                </div>
+            </div>
+
+            <button type="button" class="btn btn-green" onclick="confirmBooking()">WhatsApp par Order Book Karein</button>
+        </div>
+
+        <div class="card" id="feedback">
+            <h2>Customer Feedback</h2>
+
+            <label>Rating Dein</label>
+            <div class="stars" id="starRating">
+                <span class="active" onclick="setRating(1)">★</span>
+                <span class="active" onclick="setRating(2)">★</span>
+                <span class="active" onclick="setRating(3)">★</span>
+                <span class="active" onclick="setRating(4)">★</span>
+                <span class="active" onclick="setRating(5)">★</span>
+            </div>
+
+            <label for="reviewName">Aapka Naam</label>
+            <input type="text" id="reviewName" placeholder="Aapka naam likhein">
+
+            <label for="reviewText">Aapka Feedback</label>
+            <textarea id="reviewText" rows="2" placeholder="Service kaisi lagi? Yahan likhein..."></textarea>
+
+            <button type="button" class="btn btn-blue" onclick="submitFeedback()">Feedback Submit Karein</button>
+
+            <div id="reviewsContainer"></div>
+        </div>
+
+    </div>
+
+    <!-- TECHNICIAN / OWNER SECTION -->
+    <div id="technicianSectio
