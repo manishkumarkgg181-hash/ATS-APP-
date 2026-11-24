@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Apna Technical Services - Technician & Mistri App</title>
+<style>
+:root {
+--primary: #0f766e;
+--secondary: #f59e0b;
+--bg: #f1f5f9;
+--text: #1e293b;
+--success: #16a34a;
+--danger: #dc2626;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, sans-serif; }
+body { background: #cbd5e1; display: flex; justify-content: center; min-height: 100vh; }
+.app-container {
+width: 100%;
+max-width: 480px;
+background: var(--bg);
+min-height: 100vh;
+box-shadow: 0 0 25px rgba(0,0,0,0.15);
+padding-bottom: 30px;
+}
+header {
+background: linear-gradient(135deg, #115e59, #0d9488);
+color: white;
+padding: 15px;
+position: sticky;
+top: 0;
+z-index: 100;
+}
+.header-top { display: flex; justify-content: space-between; align-items: center; }
+.header-top h1 { font-size: 16.5px; }
+.role-badge { background: var(--secondary); color: #000; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; }
+.sub-header { font-size: 11px; opacity: 0.92; margin-top: 4px; }
+.container { padding: 14px; }
+.card { background: white; border-radius: 12px; padding: 14px; margin-bottom: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
+.card h3 { font-size: 16px; margin-bottom: 10px; color: var(--primary); }
+label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 4px; color: #475569; }
+input, select, textarea { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; margin-bottom: 11px; font-size: 14px; }
+.btn { width: 100%; padding: 11px; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; background: var(--primary); color: white; text-decoration: none; display: inline-block; text-align: center; }
+.btn-success { background: var(--success); }
+.btn-warning { background: var(--secondary); color: #000; }
+.btn-danger { background: var(--danger); }
+.btn-loc { background: #0284c7; color: #fff; }
+.btn-sm { padding: 6px 10px; font-size: 12px; width: auto; margin-right: 5px; margin-top: 6px; }
+.otp-row { display: flex; gap: 8px; align-items: center; margin-bottom: 10px; }
+.otp-row input { margin-bottom: 0; }
+.loc-box { background: #f0f9ff; border: 1px solid #38bdf8; padding: 10px; border-radius: 8px; margin-top: 10px; font-size: 12px; }
+.order-item { border-left: 4px solid var(--primary); background: #f8fafc; padding: 10px; border-radius: 8px; margin-bottom: 10px; font-size: 12.5px; line-height: 1.45; }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: bold; background: #e2e8f0; }
+.proof-box { background: #fffbeb; border: 1px solid #f59e0b; border-radius: 10px; padding: 10px; margin-top: 8px; }
+.proof-box h4 { font-size: 13px; color: #92400e; margin-bottom: 6px; }
+.proof-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 8px; }
+.proof-card { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 6px; text-align: center; font-size: 11px; }
+.proof-card img { width: 100%; height: 95px; object-fit: cover; border-radius: 6px; margin-top: 4px; }
+.modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); z-index: 200; justify-content: center; align-items: center; padding: 14px; }
+.modal-backdrop.open { display: flex; }
+.bill-sheet { background: white; width: 100%; max-width: 440px; border-radius: 12px; padding: 16px; }
+.bill-header { border-bottom: 2px solid #0f766e; padding-bottom: 8px; margin-bottom: 10px; text-align: center; }
+.bill-row { display: flex; justify-content: space-between; font-size: 12.5px; padding: 5px 0; border-bottom: 1px dashed #e2e8f0; }
+</style>
+</head>
+<body>
+<div class="app-container">
+<header>
+<div class="header-top">
+<h1>👷 ATS Worker & Technician</h1>
+<span class="role-badge" id="workerBadge">Staff Portal</span>
+</div>
+<div class="sub-header">Apna Technical Services | Owner Support: 9693654168</div>
+</header>
+
+<div class="container">
+<!-- LOGIN FORM -->
+<div class="card" id="loginFormCard">
+<h3>🔐 Technician / Mistri / Labour Login</h3>
+<form onsubmit="handleWorkerLogin(event)">
+<label>Apna Role Chunein</label>
+<select id="loginRole" onchange="toggleSubCategory()">
+<option value="Technician">Technician (AC, Fridge, TV, Bijli, Motor)</option>
+<option value="Labour">Labour / Mistri (Raj Mistri, Plumber, Tiles, Paint)</option>
+</select>
+
+<label>Apna Branch Chunein</label>
+<select id="loginBranch">
+<option value="Khagaria Main Branch">Khagaria (Main Branch)</option>
+<option value="Maheshkhunt Branch">Maheshkhunt Branch</option>
+<option value="Beldaur Branch">Beldaur Branch</option>
+<option value="Alamnagar - Khurhan Branch">Alamnagar - Khurhan Branch</option>
+<option value="All Branches">All Branches</option>
+</select>
+
+<div id="labourCategoryDiv" style="display:none;">
+<label>Mistri / Labour Category</label>
+<select id="labourCategory">
+<option value="Raj Mistri">Raj Mistri</option>
+<option value="Plumber">Plumber Mistri</option>
+<option value="Tiles Mistri">Tiles Mistri</option>
+<option value="Paint & Putti">Paint aur Putti Mistri</option>
+<option value="Labour">General Labour</option>
+</select>
+</div>
+
+<label>Apne Kaam ka Vivaran (Skill / Experience)</label>
+<textarea id="workerWorkDetails" rows="2" placeholder="Jaise: AC, Fridge, LED TV repair (4 saal anubhav)" required></textarea>
+
+<label>Poora Naam</label>
+<input type="text" id="loginName" placeholder="Apna naam likhein" required />
+
+<label>Mobile Number (10 Digit)</label>
+<div class="otp-row">
+<input type="tel" id="loginPhone" placeholder="10 digit mobile number" required />
+<button type="button" class="btn btn-loc btn-sm" style="margin-top:0; white-space:nowrap;" onclick="sendMobileOtp()">📲 OTP Bhejein</button>
+</div>
+
+<div id="recaptcha-container" style="margin-bottom:8px; overflow-x:auto;"></div>
+
+<label>Mobile OTP Daalein</label>
+<div class="otp-row">
+<input type="text" id="otpCodeInput" placeholder="6-digit OTP daalein" />
+<button type="button" class="btn btn-success btn-sm" style="margin-top:0; white-space:nowrap;" onclick="verifyMobileOtp()">✔️ Verify OTP</button>
+</div>
+<div id="otpStatusText" style="font-size:12px; color:#475569; margin-bottom:10px;">Pehle OTP verify karein.</div>
+
+<label>Staff Security PIN Daalein</label>
+<input type="password" id="loginPin" placeholder="Security PIN daalein" required />
+
+<div style="font-size:11.5px; color:#92400e; background:#fffbeb; padding:8px; border-radius:6px; margin-bottom:10px;">
+ℹ️ Pehli baar login ke liye Owner se approval zaroori hai.
+</div>
+
+<button type="submit" class="btn">Dashboard Kholein</button>
+</form>
+</div>
+
+<!-- WORKER DASHBOARD -->
+<div id="dashboardArea" style="display:none;">
+<div class="card">
+<div style="display:flex; justify-content:space-between; align-items:center;">
+<div>
+<strong id="dashWelcome">Welcome!</strong>
+<div style="font-size:12px; color:#64748b;" id="dashSubRole"></div>
+</div>
+<button class="btn btn-danger btn-sm" onclick="logout()">Logout</button>
+</div>
+
+<div class="loc-box">
+<strong>🛰️ Live GPS Location Sharing (Customer ko dikhegi):</strong>
+<div id="workerLocStatus" style="margin:4px 0;">Tracking band hai.</div>
+<button type="button" class="btn btn-loc btn-sm" onclick="startWorkerLiveTracking()">▶️ Live Location On Karein</button>
+<button type="button" class="btn btn-danger btn-sm" onclick="stopWorkerLiveTracking()">⏹️ Stop</button>
+</div>
+</div>
+
+<div class="card">
+<h3>📋 Meri Branch ki Service Bookings</h3>
+<div id="ordersList"></div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- DIGITAL BILL MODAL -->
+<div id="billModal" class="modal-backdrop" onclick="closeBillModal()">
+<div class="bill-sheet" onclick="event.stopPropagation()">
+<div class="bill-header">
+<h3 style="color:#0f766e;">🧾 Apna Technical Services</h3>
+<div style="font-size:11px; color:#475569;">Work Completion Bill Receipt</div>
+</div>
+<div id="billContent"></div>
+<div style="margin-top:12px; display:flex; gap:8px;">
+<button type="button" class="btn btn-success btn-sm" style="flex:1;" onclick="window.print()">🖨️ Print</button>
+<button type="button" class="btn btn-danger btn-sm" style="flex:1;" onclick="closeBillModal()">❌ Band Karein</button>
+</div>
+</div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, doc, setDoc, updateDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getStorage, ref, uploadString, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCiVIJ7zSmy2DpVuRcDS49y0wKDsZR3G_g",
+  authDomain: "apna-technical-services.firebaseapp.com",
+  projectId: "apna-technical-services",
+  storageBucket: "apna-technical-services.firebasestorage.app",
+  appId: "1:806774256267:android:e40a2a735420bae5df5a0e"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const storage = getStorage(app);
+const auth = getAuth(app);
+
+const WORKER_PINS = { Technician: "ATS@7788", Labour: "ATS@9988" };
+let currentWorker = JSON.parse(localStorage.getItem("ats_worker_user")) || null;
+let bookings = [];
+let approvedWorkers = {};
+let watchId = null;
+let confirmationResultObj = null;
+let verifiedPhoneNumber = null;
+let recaptchaVerifier = null;
+let backupGeneratedOtp = null;
+
+function normalizePhone10(p) { return (p || "").replace(/\D/g, "").slice(-10); }
+
+function init() {
+  updateUI();
+  onSnapshot(collection(db, "approvedWorkers"), (snap) => {
+    const map = {};
+    snap.forEach(d => { map[d.id] = d.data(); });
+    approvedWorkers = map;
+  });
+  onSnapshot(query(collection(db, "bookings"), orderBy("createdAt", "desc")), (snap) => {
+    bookings = snap.docs.map(d => d.data());
+    if (currentWorker) renderJobs();
+  });
+}
+
+window.toggleSubCategory = function() {
+  const role = document.getElementById('loginRole').value;
+  document.getElementById('labourCategoryDiv').style.display = role === "Labour" ? "block" : "none";
+};
+
+function setupRecaptcha() {
+  if (!recaptchaVerifier) {
+    recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', { size: 'normal' });
+  }
+}
+
+window.sendMobileOtp = async function() {
+  const phone10 = normalizePhone10(document.getElementById('loginPhone').value);
+  if (phone10.length !== 10) return alert("⚠️ Sahi 10-digit mobile number daalein.");
+  const statusEl = document.getElementById('otpStatusText');
+  statusEl.innerText = "⏳ OTP bheja ja raha hai...";
+  try {
+    setupRecaptcha();
+    confirmationResultObj = await signInWithPhoneNumber(auth, "+91" + phone10, recaptchaVerifier);
+    statusEl.style.color = "#16a34a";
+    statusEl.innerText = `📲 +91${phone10} par OTP bhej diya gaya hai!`;
+  } catch (e) {
+    backupGeneratedOtp = Math.floor(100000 + Math.random() * 900000).toString();
+    statusEl.style.color = "#b45309";
+    statusEl.innerText = `⚠️ Backup OTP: ${backupGeneratedOtp}`;
+  }
+};
+
+window.verifyMobileOtp = async function() {
+  const code = document.getElementById('otpCodeInput').value.trim();
+  const phone10 = normalizePhone10(document.getElementById('loginPhone').value);
+  const statusEl = document.getElementById('otpStatusText');
+  try {
+    if (confirmationResultObj) {
+      await confirmationResultObj.confirm(code);
+      verifiedPhoneNumber = phone10;
+      statusEl.style.color = "#16a34a";
+      statusEl.innerText = "✅ Mobile Verify Ho Gaya!";
+    } else if (backupGeneratedOtp && code === backupGeneratedOtp) {
+      verifiedPhoneNumber = phone10;
+      statusEl.style.color = "#16a34a";
+      statusEl.innerText = "✅ Mobile Verify Ho Gaya!";
+    } else {
+      alert("❌ Galat OTP!");
+    }
+  } catch (err) {
+    alert("❌ OTP Error: " + err.message);
+  }
+};
+
+window.handleWorkerLogin = async function(e) {
+  e.preventDefault();
+  const role = document.getElementById('loginRole').value;
+  const branch = document.getElementById('loginBranch').value;
+  const labourCat = document.getElementById('labourCategory').value;
+  const workDetails = document.getElementById('workerWorkDetails').value.trim();
+  const name = document.getElementById('loginName').value.trim();
+  const phone10 = normalizePhone10(document.getElementById('loginPhone').value);
+  const pin = document.getElementById('loginPin').value.trim();
+
+  if (verifiedPhoneNumber !== phone10) return alert("⚠️ Pehle Mobile OTP verify karein!");
+  if (pin !== WORKER_PINS[role]) return alert(`❌ ${role} ke liye galat Security PIN!`);
+
+  const subRole = role === "Labour" ? labourCat : "Technician";
+
+  if (!approvedWorkers[phone10]) {
+    await setDoc(doc(db, "pendingWorkers", phone10), {
+      phone: phone10, name, role, branch, subRole, workDetails, requestedAt: Date.now()
+    });
+    alert("⏳ Aapki request Owner ke paas bhej di gayi hai. Owner approval ke baad login karein.");
+    return;
+  }
+
+  currentWorker = { name, phone: phone10, role, subRole, branch, workDetails };
+  await setDoc(doc(db, "workerProfiles", phone10), { ...currentWorker, updatedAt: Date.now() }, { merge: true });
+  localStorage.setItem("ats_worker_user", JSON.stringify(currentWorker));
+  updateUI();
+};
+
+window.logout = function() {
+  stopWorkerLiveTracking();
+  currentWorker = null;
+  verifiedPhoneNumber = null;
+  localStorage.removeItem("ats_worker_user");
+  updateUI();
+};
+
+function updateUI() {
+  if (!currentWorker) {
+    document.getElementById('workerBadge').innerText = "Staff Portal";
+    document.getElementById('loginFormCard').style.display = "block";
+    document.getElementById('dashboardArea').style.display = "none";
+    return;
+  }
+  document.getElementById('workerBadge').innerText = currentWorker.subRole;
+  document.getElementById('loginFormCard').style.display = "none";
+  document.getElementById('dashboardArea').style.display = "block";
+  document.getElementById('dashWelcome').innerText = `Namaste, ${currentWorker.name}!`;
+  document.getElementById('dashSubRole').innerText = `${currentWorker.subRole} | ${currentWorker.branch}`;
+  renderJobs();
+}
+
+window.startWorkerLiveTracking = function() {
+  if (!currentWorker || !navigator.geolocation) return alert("⚠️ GPS available nahi hai.");
+  const statusEl = document.getElementById('workerLocStatus');
+  statusEl.innerText = "📡 Live GPS shuru ho raha hai...";
+  watchId = navigator.geolocation.watchPosition(
+    async (pos) => {
+      statusEl.innerHTML = `🟢 Live Active: <strong>${pos.coords.latitude.toFixed(5)}, ${pos.coords.longitude.toFixed(5)}</strong>`;
+      await setDoc(doc(db, "workerLocations", currentWorker.phone), {
+        phone: currentWorker.phone,
+        name: currentWorker.name,
+        role: currentWorker.subRole,
+        branch: currentWorker.branch,
+        lat: pos.coords.latitude,
+        lng: pos.coords.longitude,
+        updatedAt: Date.now()
+      });
+    },
+    (err) => { statusEl.innerText = "❌ GPS Error: " + err.message; },
+    { enableHighAccuracy: true, maximumAge: 5000 }
+  );
+};
+
+window.stopWorkerLiveTracking = function() {
+  if (watchId !== null) { navigator.geolocation.clearWatch(watchId); watchId = null; }
+  document.getElementById('workerLocStatus').innerText = "⏹️ Tracking band hai.";
+};
+
+function renderJobs() {
+  const listEl = document.getElementById('ordersList');
+  const myJobs = bookings.filter(b => {
+    const branchMatch = currentWorker.branch === "All Branches" || b.branch === currentWorker.branch;
+    return branchMatch && b.workerType === currentWorker.role;
+  });
+
+  if (myJobs.length === 0) {
+    listEl.innerHTML = `<p style="font-size:12.5px; color:#64748b;">Abhi aapki branch mein koi job nahi hai.</p>`;
+    return;
+  }
+
+  listEl.innerHTML = myJobs.map(b => {
+    const mapBtn = (b.lat && b.lng) ? `<a href="https://maps.google.com/?q=${b.lat},${b.lng}" target="_blank" class="btn btn-loc btn-sm">📍 Customer Map</a>` : "";
+    const photos = (b.beforePhoto || b.afterPhoto) ? `<div class="proof-grid">${b.beforePhoto ? `<div class="proof-card"><strong>Before</strong><img src="${b.beforePhoto}"/></div>` : ""}${b.afterPhoto ? `<div class="proof-card"><strong>After</strong><img src="${b.afterPhoto}"/></div>` : ""}</div>` : "";
+    return `
+      <div class="order-item">
+        <div style="display:flex; justify-content:space-between;"><strong>#${b.id} - ${b.service}</strong><span class="badge">${b.status}</span></div>
+        <div><strong>Customer:</strong> ${b.customerName} | 📞 <a href="tel:${b.customerPhone}">${b.customerPhone}</a></div>
+        <div><strong>Address:</strong> ${b.address} (${b.distKm} KM)</div>
+        <div><strong>Date:</strong> ${b.date} | <strong>Payment:</strong> ${b.paymentMode}</div>
+        ${mapBtn}
+        ${photos}
+        <div class="proof-box">
+          <h4>📸 Job Action & Work Proof</h4>
+          <button class="btn btn-warning btn-sm" onclick="acceptJob('${b.id}')">✋ Job Accept Karein</button>
+          <button class="btn btn-success btn-sm" onclick="completeJob('${b.id}')">✅ Kaam Complete</button>
+          <button class="btn btn-sm" onclick="openBillModal('${b.id}')">🧾 Bill</button>
+          <div style="margin-top:6px;">
+            <label>Before Photo:</label>
+            <input type="file" accept="image/*" onchange="uploadWorkPhoto(event, '${b.id}', 'beforePhoto')" />
+            <label>After Photo:</label>
+            <input type="file" accept="image/*" onchange="uploadWorkPhoto(event, '${b.id}', 'afterPhoto')" />
+          </div>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+window.acceptJob = async function(id) {
+  await updateDoc(doc(db, "bookings", id), {
+    status: "On The Way",
+    assignedWorkerPhone: currentWorker.phone,
+    assignedWorkerName: currentWorker.name
+  });
+  alert("✅ Job Accept ho gayi! Ab Live GPS on kar lein.");
+};
+
+window.completeJob = async function(id) {
+  await updateDoc(doc(db, "bookings", id), { status: "Completed" });
+  alert("✅ Kaam Completed mark ho gaya!");
+};
+
+window.uploadWorkPhoto = function(event, bookingId, fieldName) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async function(e) {
+    const dataUrl = e.target.result;
+    try {
+      const storageRef = ref(storage, `workProofs/${bookingId}_${fieldName}_${Date.now()}.jpg`);
+      await uploadString(storageRef, dataUrl, 'data_url');
+      const url = await getDownloadURL(storageRef);
+      await updateDoc(doc(db, "bookings", bookingId), { [fieldName]: url });
+      alert("✅ Photo upload ho gayi!");
+    } catch {
+      await updateDoc(doc(db, "bookings", bookingId), { [fieldName]: dataUrl });
+      alert("✅ Photo save ho gayi!");
+    }
+  };
+  reader.readAsDataURL(file);
+};
+
+window.openBillModal = function(id) {
+  const b = bookings.find(item => item.id === id);
+  if (!b) return;
+  document.getElementById('billContent').innerHTML = `
+    <div class="bill-row"><span>Booking ID:</span><strong>${b.id}</strong></div>
+    <div class="bill-row"><span>Customer:</span><span>${b.customerName} (${b.customerPhone})</span></div>
+    <div class="bill-row"><span>Service:</span><strong>${b.service}</strong></div>
+    <div class="bill-row"><span>Worker:</span><span>${currentWorker.name}</span></div>
+    <div class="bill-row"><span>Payment:</span><span>${b.paymentMode}</span></div>
+    <div class="bill-row" style="border:none; font-size:14px;"><strong>Charge:</strong><strong style="color:#16a34a;">₹${b.finalAmount || 400}</strong></div>
+  `;
+  document.getElementById('billModal').classList.add('open');
+};
+
+window.closeBillModal = function() { document.getElementById('billModal').classList.remove('open'); };
+
+init();
+</script>
+</body>
+</html>
