@@ -1,0 +1,2199 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Apna Technical Services - 3-in-1 App</title>
+<style>
+:root {
+  --primary: #0f172a;
+  --accent: #2563eb;
+  --secondary: #f59e0b;
+  --bg: #f1f5f9;
+  --success: #16a34a;
+  --danger: #dc2626;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, sans-serif; }
+body { background: #cbd5e1; display: flex; justify-content: center; min-height: 100vh; }
+.app-container {
+  width: 100%;
+  max-width: 480px;
+  background: var(--bg);
+  min-height: 100vh;
+  box-shadow: 0 0 25px rgba(0,0,0,0.15);
+  padding-bottom: 30px;
+}
+header {
+  background: linear-gradient(135deg, #0f172a, #1e3a8a);
+  color: white;
+  padding: 14px 15px 10px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.header-top { display: flex; justify-content: space-between; align-items: center; }
+.header-top h1 { font-size: 16px; }
+.badge-pill { background: var(--secondary); color: #000; padding: 3px 9px; border-radius: 20px; font-size: 10.5px; font-weight: bold; }
+.sub-header { font-size: 11px; opacity: 0.9; margin-top: 3px; }
+.mode-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-top: 10px;
+}
+.tab-btn {
+  padding: 7px 6px;
+  border: 1px solid rgba(255,255,255,0.22);
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.tab-btn.active {
+  background: var(--secondary);
+  color: #000;
+  border-color: var(--secondary);
+}
+.container { padding: 14px; }
+.card { background: white; border-radius: 12px; padding: 14px; margin-bottom: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
+.card h3 { font-size: 15.5px; margin-bottom: 10px; color: #1e3a8a; }
+label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 4px; color: #475569; }
+input, select, textarea { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; margin-bottom: 11px; font-size: 14px; background: #fff; }
+.btn { width: 100%; padding: 11px; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; background: var(--accent); color: white; text-decoration: none; display: inline-block; text-align: center; }
+.btn-success { background: var(--success); }
+.btn-warning { background: var(--secondary); color: #000; }
+.btn-danger { background: var(--danger); }
+.btn-loc { background: #0284c7; color: #fff; }
+.btn-dark { background: #334155; color: #fff; }
+.btn-sm { padding: 6px 10px; font-size: 12px; width: auto; margin-right: 5px; margin-top: 6px; }
+.row-inline { display: flex; gap: 8px; align-items: center; margin-bottom: 10px; }
+.row-inline input { margin-bottom: 0; }
+.filter-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.info-box { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e3a8a; padding: 10px; border-radius: 8px; font-size: 12px; margin-bottom: 11px; line-height: 1.45; }
+.warn-box { background: #fffbeb; border: 1px solid #fde68a; color: #92400e; padding: 10px; border-radius: 8px; font-size: 12px; margin-bottom: 11px; line-height: 1.45; }
+.stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 12px; }
+.stat-box { background: white; padding: 12px; border-radius: 10px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border-top: 3px solid var(--accent); }
+.stat-box.green { border-top-color: var(--success); }
+.stat-box.amber { border-top-color: var(--secondary); }
+.stat-num { font-size: 20px; font-weight: bold; color: #1e3a8a; }
+.stat-box.green .stat-num { color: #15803d; }
+.stat-box.amber .stat-num { color: #b45309; }
+.stat-label { font-size: 11px; color: #64748b; margin-top: 2px; }
+.order-item { border-left: 4px solid var(--accent); background: #f8fafc; padding: 10px; border-radius: 8px; margin-bottom: 10px; font-size: 12.5px; line-height: 1.45; }
+.order-item.online-worker { border-left-color: var(--success); background: #f0fdf4; }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: bold; background: #e2e8f0; color: #1e293b; }
+.badge-paid { background: #dcfce7; color: #166534; }
+.badge-pending { background: #fef3c7; color: #92400e; }
+.badge-jobs { background: #dbeafe; color: #1e40af; }
+.owner-tools { background: #eef2ff; border: 1px solid #c7d2fe; border-radius: 8px; padding: 8px; margin-top: 8px; }
+.proof-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 8px; }
+.proof-card { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 6px; text-align: center; font-size: 11px; }
+.proof-card img { width: 100%; height: 85px; object-fit: cover; border-radius: 6px; margin-top: 4px; }
+.sig-box { border: 1.5px dashed #64748b; border-radius: 8px; background: #ffffff; padding: 4px; margin-bottom: 10px; }
+.sig-canvas { width: 100%; height: 130px; display: block; touch-action: none; cursor: crosshair; }
+.sig-preview-img { max-height: 75px; max-width: 100%; border: 1px solid #cbd5e1; border-radius: 6px; background: #fff; padding: 3px; margin-top: 4px; }
+.modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); z-index: 200; justify-content: center; align-items: center; padding: 14px; overflow-y: auto; }
+.modal-backdrop.open { display: flex; }
+.bill-sheet { background: white; width: 100%; max-width: 440px; border-radius: 12px; padding: 16px; max-height: 90vh; overflow-y: auto; }
+.bill-header { border-bottom: 2px solid #1e3a8a; padding-bottom: 8px; margin-bottom: 10px; text-align: center; }
+.bill-row { display: flex; justify-content: space-between; font-size: 12.5px; padding: 5px 0; border-bottom: 1px dashed #e2e8f0; }
+
+@media print {
+  body { background: #fff; }
+  .app-container { box-shadow: none; max-width: 100%; }
+  .modal-backdrop { position: static; background: none; display: block !important; padding: 0; }
+  .bill-sheet { max-width: 100%; box-shadow: none; }
+  .bill-sheet button { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="app-container">
+<header>
+  <div class="header-top">
+    <h1>🛠️ Apna Technical Services</h1>
+    <span class="badge-pill" id="headerModeBadge">Customer</span>
+  </div>
+  <div class="sub-header">UPI: manishkumarkgg181@ybl | Visiting: ₹400 | Radius: 25 KM</div>
+  <div class="mode-tabs">
+    <button type="button" class="tab-btn active" id="tab-customer" onclick="switchPortal('customer')">🙋 Customer</button>
+    <button type="button" class="tab-btn" id="tab-technician" onclick="switchPortal('technician')">👷 Mistri / Tech</button>
+    <button type="button" class="tab-btn" id="tab-owner" onclick="switchPortal('owner')">👑 Owner</button>
+  </div>
+</header>
+
+<div class="container">
+  <!-- ==================== 1. CUSTOMER PORTAL ==================== -->
+  <div id="portal-customer">
+    <div class="card">
+      <h3>📝 Service Book Karein</h3>
+      <div class="info-box">
+        <strong>Branches:</strong> Khagaria (Main), Maheshkhunt, Beldaur, Alamnagar - Khurhan<br/>
+        <strong>Visiting Charge:</strong> ₹400 | <strong>Helpline:</strong> 9693654168
+      </div>
+      <form id="bookingForm" onsubmit="submitBooking(event)">
+        <label>Aapka Naam</label>
+        <input type="text" id="custName" placeholder="Apna naam likhein" required />
+
+        <label>Mobile Number (10-digit)</label>
+        <input type="tel" id="custPhone" placeholder="98xxxxxxxx" maxlength="15" required />
+
+        <label>Branch Chunein</label>
+        <select id="custBranch" onchange="updateDistancePreview()">
+          <option value="Khagaria Main Branch">1. Khagaria (Main Branch)</option>
+          <option value="Maheshkhunt Branch">2. Maheshkhunt Branch</option>
+          <option value="Beldaur Branch">3. Beldaur Branch</option>
+          <option value="Alamnagar - Khurhan Branch">4. Alamnagar - Khurhan Branch</option>
+        </select>
+
+        <label>Service Chunein</label>
+        <select id="custService">
+          <option value="AC Repair & Service">AC Repair & Service</option>
+          <option value="Fridge / Refrigerator Repair">Fridge / Refrigerator Repair</option>
+          <option value="Washing Machine Repair">Washing Machine Repair</option>
+          <option value="Fan / Cooler / Motor Winding">Fan / Cooler / Motor Winding</option>
+          <option value="House Wiring & Inverter">House Wiring & Inverter</option>
+          <option value="RO / Water Purifier & Geyser">RO / Water Purifier & Geyser</option>
+          <option value="Computer / Printer / CCTV">Computer / Printer / CCTV</option>
+        </select>
+
+        <label>Pura Address</label>
+        <input type="text" id="custAddress" placeholder="Gaon / Mohalla, Post, Thana" required />
+
+        <label>GPS Location & Distance (Max 25 KM)</label>
+        <div class="row-inline">
+          <input type="text" id="custCoords" placeholder="GPS capture karein" readonly />
+          <button type="button" class="btn btn-loc btn-sm" style="margin-top:0; white-space:nowrap;" onclick="captureCustomerLocation()">📍 GPS Lein</button>
+        </div>
+        <div id="distInfoText" style="font-size:12px; color:#475569; margin-bottom:10px;">Approximate Distance: — KM</div>
+
+        <label>Preferred Date</label>
+        <input type="date" id="custDate" required />
+
+        <label>Payment Mode</label>
+        <select id="custPaymentMode" onchange="toggleTxnField()">
+          <option value="UPI">UPI (manishkumarkgg181@ybl)</option>
+          <option value="Cash After Visit">Cash After Visit (₹400)</option>
+        </select>
+
+        <div id="txnBox">
+          <label>UPI Transaction / UTR ID</label>
+          <input type="text" id="custTxnId" placeholder="12-digit UTR / Txn ID daalein" />
+        </div>
+
+        <button type="submit" class="btn btn-success" id="bookBtn">✅ Booking Confirm Karein (₹400)</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h3>📦 Meri Bookings Track Karein</h3>
+      <label>Apna Mobile Number Daalein:</label>
+      <div class="row-inline">
+        <input type="tel" id="trackPhoneInput" placeholder="Mobile number se search karein" />
+        <button type="button" class="btn btn-sm" style="margin-top:0; white-space:nowrap;" onclick="renderCustomerBookings()">🔍 Dekhein</button>
+      </div>
+      <div id="customerBookingsList"></div>
+    </div>
+
+    <div class="card">
+      <h3>⭐ Review / Feedback Dein</h3>
+      <form onsubmit="submitFeedback(event)">
+        <label>Aapka Naam</label>
+        <input type="text" id="fbName" placeholder="Naam likhein" required />
+        <label>Rating</label>
+        <select id="fbRating">
+          <option value="5">⭐⭐⭐⭐⭐ (5 - Bahut Accha)</option>
+          <option value="4">⭐⭐⭐⭐ (4 - Accha)</option>
+          <option value="3">⭐⭐⭐ (3 - Theek)</option>
+        </select>
+        <label>Aapka Anubhav</label>
+        <textarea id="fbComment" rows="2" placeholder="Service kaisi lagi?" required></textarea>
+        <button type="submit" class="btn btn-warning">⭐ Feedback Bhejein</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== 2. MISTRI / TECHNICIAN / LABOUR PORTAL ==================== -->
+  <div id="portal-technician" style="display:none;">
+    <div class="card" id="workerAuthCard">
+      <h3>🔐 Mistri / Technician / Labour OTP Login</h3>
+      <label>Mobile Number (10-digit — Usi number par OTP aayega)</label>
+      <div class="row-inline">
+        <input type="tel" id="wLoginPhone" placeholder="Apna 10-digit mobile number" maxlength="15" oninput="onOtpPhoneChange('worker')" />
+        <button type="button" class="btn btn-loc btn-sm" style="margin-top:0; white-space:nowrap;" onclick="sendOtpForRole('worker')">📲 OTP Bhejein</button>
+      </div>
+      <div id="worker-recaptcha-container" style="margin-bottom:8px; overflow-x:auto;"></div>
+      <div class="row-inline">
+        <input type="text" id="wOtpInput" placeholder="6-digit OTP daalein" maxlength="6" />
+        <button type="button" class="btn btn-success btn-sm" style="margin-top:0; white-space:nowrap;" onclick="verifyOtpForRole('worker')">✔️ Verify & Login</button>
+      </div>
+      <div id="wOtpStatus" style="font-size:12px; color:#475569; margin-bottom:10px;">Login ke baad Aadhaar, PAN, Bank/UPI aur Selfie bhar kar Owner approval lein.</div>
+
+      <hr style="margin:14px 0; border:none; border-top:1px solid #e2e8f0;" />
+
+      <h3 style="font-size:14px;">➕ Naya Mistri / Labour Registration</h3>
+      <form onsubmit="registerPendingWorker(event)">
+        <label>Mobile Number (10-digit)</label>
+        <input type="tel" id="wRegPhone" placeholder="10-digit mobile number" maxlength="15" required />
+        <label>Naam</label>
+        <input type="text" id="wRegName" placeholder="Mistri / Labour ka naam" required />
+        <label>Kaam / Category</label>
+        <select id="wRegRole">
+          <option value="Mistri (Electrical / Appliance)">Mistri (Electrical / Appliance)</option>
+          <option value="AC & Fridge Technician">AC & Fridge Technician</option>
+          <option value="Helper / Labour">Helper / Labour</option>
+          <option value="Wiring & Plumbing Mistri">Wiring & Plumbing Mistri</option>
+        </select>
+        <label>Branch</label>
+        <select id="wRegBranch">
+          <option value="Khagaria Main Branch">1. Khagaria (Main Branch)</option>
+          <option value="Maheshkhunt Branch">2. Maheshkhunt Branch</option>
+          <option value="Beldaur Branch">3. Beldaur Branch</option>
+          <option value="Alamnagar - Khurhan Branch">4. Alamnagar - Khurhan Branch</option>
+        </select>
+        <label>Work Details</label>
+        <input type="text" id="wRegDetails" placeholder="Experience / specialty" required />
+        <button type="submit" class="btn btn-warning">📩 Initial Request Bhejein</button>
+      </form>
+    </div>
+
+    <div id="workerPanel" style="display:none;">
+      <div class="card" style="display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <strong id="wWelcomeText">Namaste!</strong>
+          <div id="wMetaText" style="font-size:11.5px; color:#64748b;"></div>
+          <div style="margin-top:4px;"><span class="badge" id="wKycBadge">KYC Pending</span></div>
+        </div>
+        <button type="button" class="btn btn-danger btn-sm" style="margin-top:0;" onclick="logoutAuthSession()">Logout</button>
+      </div>
+
+      <!-- POST-LOGIN KYC DOCUMENT, ID NUMBERS, BANK/UPI & SELFIE CARD -->
+      <div class="card" id="workerKycCard">
+        <h3>🪪 KYC & Payout Details (Aadhaar, PAN, Bank/UPI & Selfie)</h3>
+        <div class="warn-box" id="kycInstructionBox">
+          Login ke baad <strong>Aadhaar Card Number</strong>, <strong>PAN Card Number</strong>, <strong>Bank Account ya UPI ID</strong>, aur teeno photos (<strong>Aadhaar</strong>, <strong>PAN</strong>, <strong>Selfie</strong>) bhar kar submit karein. Uske baad <strong>Owner</strong> approve karega.
+        </div>
+
+        <label>Naam (Agar update karna ho)</label>
+        <input type="text" id="kycWorkerName" placeholder="Mistri / Labour ka naam" />
+
+        <label>Aadhaar Card Number (12-digit)</label>
+        <input type="text" id="kycAadhaarNumber" placeholder="12-digit Aadhaar number daalein" maxlength="16" />
+
+        <label>PAN Card Number (10-character)</label>
+        <input type="text" id="kycPanNumber" placeholder="ABCDE1234F" maxlength="10" style="text-transform:uppercase;" />
+
+        <label>Payout Mode Chunein (Bank Account ya UPI)</label>
+        <select id="kycPayoutMode" onchange="toggleKycPayoutFields()">
+          <option value="Bank Account">Bank Account (Account No. + IFSC)</option>
+          <option value="UPI">UPI ID</option>
+        </select>
+
+        <div id="kycBankBox">
+          <label>Bank Account Number</label>
+          <input type="text" id="kycBankAccount" placeholder="Apna bank account number daalein" maxlength="25" />
+
+          <label>IFSC Code</label>
+          <input type="text" id="kycBankIfsc" placeholder="Jaise: SBIN0001234" maxlength="15" style="text-transform:uppercase;" />
+
+          <label>Account Holder Ka Naam</label>
+          <input type="text" id="kycBankHolder" placeholder="Passbook ke mutabik naam" />
+        </div>
+
+        <div id="kycUpiBox" style="display:none;">
+          <label>UPI ID</label>
+          <input type="text" id="kycUpiId" placeholder="jaise: naam@ybl / 98xxxxxxxx@upi" />
+        </div>
+
+        <label>1. Aadhaar Card Photo</label>
+        <input type="file" id="kycAadhaarInput" accept="image/*" capture="environment" onchange="handleKycPhotoSelect('aadhaarPhotoUrl', this)" style="font-size:12px; padding:6px;" />
+
+        <label>2. PAN Card Photo</label>
+        <input type="file" id="kycPanInput" accept="image/*" capture="environment" onchange="handleKycPhotoSelect('panPhotoUrl', this)" style="font-size:12px; padding:6px;" />
+
+        <label>3. Live Selfie Photo</label>
+        <input type="file" id="kycSelfieInput" accept="image/*" capture="user" onchange="handleKycPhotoSelect('selfiePhotoUrl', this)" style="font-size:12px; padding:6px;" />
+
+        <div id="kycPreviewGrid" class="proof-grid"></div>
+
+        <button type="button" class="btn btn-success" id="submitKycBtn" style="margin-top:10px;" onclick="submitWorkerKycForApproval()">
+          📤 Owner Approval Ke Liye KYC Bhejein
+        </button>
+      </div>
+
+      <!-- ACTIVE WORK SECTION (SHOWN ONCE KYC IS APPROVED) -->
+      <div id="workerActiveWorkArea" style="display:none;">
+        <div class="card">
+          <h3>🟢 Online Duty Status & Live GPS</h3>
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:10px;">
+            <span id="wOnlineStatusBadge" class="badge">Offline</span>
+            <button type="button" class="btn btn-success btn-sm" id="toggleOnlineDutyBtn" style="margin-top:0;" onclick="toggleWorkerOnlineDuty()">🟢 Online Aayein</button>
+          </div>
+          <button type="button" class="btn btn-loc btn-sm" onclick="shareWorkerLocation()">📡 Abhi GPS Update Karein</button>
+          <span id="gpsStatusLabel" style="font-size:12px; color:#475569; margin-left:6px;">Not shared yet</span>
+        </div>
+
+        <div class="card">
+          <h3>🛠️ Mujhe Assign Ki Gayi Bookings</h3>
+          <div id="assignedJobsList"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 3. OWNER PORTAL ==================== -->
+  <div id="portal-owner" style="display:none;">
+    <div class="card" id="loginFormCard">
+      <h3>🔐 Owner OTP Security Login</h3>
+      <form onsubmit="handleOwnerLogin(event)">
+        <label>Owner Name</label>
+        <input type="text" id="loginName" value="Manish Kumar" required />
+
+        <label>Owner Mobile Number (10-digit — Usi number par OTP aayega)</label>
+        <div class="row-inline">
+          <input type="tel" id="loginPhone" placeholder="10-digit mobile number" maxlength="15" required oninput="onOtpPhoneChange('owner')" />
+          <button type="button" class="btn btn-loc btn-sm" style="margin-top:0; white-space:nowrap;" onclick="sendOtpForRole('owner')">📲 OTP Bhejein</button>
+        </div>
+
+        <div id="recaptcha-container" style="margin-bottom:8px; overflow-x:auto;"></div>
+
+        <label>Mobile OTP Daalein</label>
+        <div class="row-inline">
+          <input type="text" id="otpCodeInput" placeholder="6-digit OTP daalein" maxlength="6" />
+          <button type="button" class="btn btn-success btn-sm" style="margin-top:0; white-space:nowrap;" onclick="verifyOtpForRole('owner')">✔️ Verify OTP</button>
+        </div>
+        <div id="otpStatusText" style="font-size:12px; color:#475569; margin-bottom:10px;">Jo mobile number daalenge, OTP usi number par bheja jayega.</div>
+
+        <button type="submit" class="btn">Admin Panel Kholein</button>
+      </form>
+    </div>
+
+    <div id="dashboardArea" style="display:none;">
+      <div class="card" style="display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <strong id="dashWelcome">Welcome, Owner!</strong>
+          <div style="font-size:12px; color:#64748b;">All 4 Branches Live Control</div>
+        </div>
+        <button class="btn btn-danger btn-sm" style="margin-top:0;" onclick="logoutAuthSession()">Logout</button>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-box"><div class="stat-num" id="statTotalOrders">0</div><div class="stat-label">Total Bookings</div></div>
+        <div class="stat-box"><div class="stat-num" id="statPaidOrders">0</div><div class="stat-label">Verified UPI</div></div>
+        <div class="stat-box"><div class="stat-num" id="statCompleted">0</div><div class="stat-label">Completed</div></div>
+        <div class="stat-box"><div class="stat-num" id="statOnlineWorkers">0</div><div class="stat-label">Online Mistri / Tech</div></div>
+      </div>
+
+      <div class="card">
+        <h3>💰 Revenue & UPI Collection</h3>
+        <div class="stats-grid" style="margin-bottom:0;">
+          <div class="stat-box green"><div class="stat-num" id="statVerifiedRevenue">₹0</div><div class="stat-label">Verified Collection</div></div>
+          <div class="stat-box amber"><div class="stat-num" id="statPendingRevenue">₹0</div><div class="stat-label">Pending / Unverified</div></div>
+        </div>
+      </div>
+
+      <!-- ONLINE MISTRI / TECHNICIAN / LABOUR LIVE SECTION FOR DIRECT BOOKING -->
+      <div class="card">
+        <h3>🟢 Online Mistri / Tech (Seedha Order / Book Karein)</h3>
+        <div id="onlineWorkersList"></div>
+      </div>
+
+      <!-- OWNER KYC APPROVAL SECTION FOR MISTRI / LABOUR / TECHNICIAN -->
+      <div class="card">
+        <h3>🪪 Mistri / Labour KYC & Payout Approval</h3>
+        <div id="kycApprovalsList"></div>
+      </div>
+
+      <div class="card">
+        <h3>🔑 New Technician Registration Requests</h3>
+        <div id="pendingWorkersList"></div>
+      </div>
+
+      <div class="card">
+        <h3>👷 Active Technicians, Completed Jobs & Live GPS</h3>
+        <div id="workersDirectoryList"></div>
+      </div>
+
+      <div class="card">
+        <h3>📋 All Bookings & UPI Verification</h3>
+        <div class="filter-row">
+          <div>
+            <label>Branch Filter:</label>
+            <select id="dashBranchFilter" onchange="renderBookings()">
+              <option value="All">All 4 Branches</option>
+              <option value="Khagaria Main Branch">1. Khagaria (Main Branch)</option>
+              <option value="Maheshkhunt Branch">2. Maheshkhunt Branch</option>
+              <option value="Beldaur Branch">3. Beldaur Branch</option>
+              <option value="Alamnagar - Khurhan Branch">4. Alamnagar - Khurhan Branch</option>
+            </select>
+          </div>
+          <div>
+            <label>Status Filter:</label>
+            <select id="dashStatusFilter" onchange="renderBookings()">
+              <option value="All">All Status</option>
+              <option value="Pending">Pending</option>
+              <option value="Assigned">Assigned</option>
+              <option value="Completed">Completed</option>
+            </select>
+          </div>
+        </div>
+
+        <label>Search (ID, Customer, Phone, Service):</label>
+        <input type="text" id="bookingSearchInput" placeholder="Jaise: #101, 9693..., AC Repair" oninput="renderBookings()" />
+
+        <div id="ordersList"></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- MISTRI JOB COMPLETION: WORK PHOTO, NEW MATERIAL PHOTO, TOTAL BILL & CUSTOMER SIGNATURE MODAL -->
+<div id="jobReportModal" class="modal-backdrop">
+  <div class="bill-sheet" onclick="event.stopPropagation()">
+    <div class="bill-header">
+      <h3 style="color:#1e3a8a;">🧾 Kaam Report, Samaan Photo & Bill Pad</h3>
+      <div id="jobReportMeta" style="font-size:11.5px; color:#475569;"></div>
+    </div>
+    <form onsubmit="submitJobCompletionReport(event)">
+      <label>1. Kaam Ki Photo (Completed Work — Zaroori)</label>
+      <input type="file" id="jrWorkPhotoInput" accept="image/*" capture="environment" onchange="handleJobReportPhoto('afterPhoto', this)" style="font-size:12px; padding:6px;" />
+      <div id="jrWorkPhotoPreview" style="margin-bottom:10px;"></div>
+
+      <label>2. Naye Samaan Ki Photo (Agar Koi Naya Samaan Laga Ho)</label>
+      <input type="file" id="jrPartPhotoInput" accept="image/*" capture="environment" onchange="handleJobReportPhoto('partPhoto', this)" style="font-size:12px; padding:6px;" />
+      <div id="jrPartPhotoPreview" style="margin-bottom:10px;"></div>
+
+      <label>Naye Samaan Ka Naam / Details (Optional)</label>
+      <input type="text" id="jrPartDetails" placeholder="Jaise: Capacitor, Copper Pipe, Switch, Bearing" />
+
+      <label>Visiting / Service Charge (₹)</label>
+      <input type="number" id="jrVisitingFee" value="400" min="0" oninput="recalcJobReportTotal()" required />
+
+      <label>Naye Samaan Ka Charge (₹) — Agar saman na laga ho to 0 rakhein</label>
+      <input type="number" id="jrPartAmount" value="0" min="0" oninput="recalcJobReportTotal()" required />
+
+      <div class="info-box" style="margin-bottom:10px;">
+        <strong>Total Bill Amount:</strong> <span id="jrTotalBillText" style="font-size:15px; font-weight:700; color:#15803d;">₹400</span>
+      </div>
+
+      <label>3. Bill Pad Par Customer Ka Signature (Zaroori)</label>
+      <div class="sig-box">
+        <canvas id="customerSigCanvas" class="sig-canvas"></canvas>
+      </div>
+      <div style="margin-bottom:10px;">
+        <button type="button" class="btn btn-dark btn-sm" style="margin-top:0;" onclick="clearCustomerSignaturePad()">🧹 Signature Saaf Karein</button>
+      </div>
+
+      <div style="margin-top:8px; display:flex; gap:8px;">
+        <button type="submit" class="btn btn-success btn-sm" id="jrSubmitBtn" style="flex:1;">📤 Owner Ko Bill & Report Bhejein</button>
+        <button type="button" class="btn btn-danger btn-sm" style="flex:1;" onclick="closeJobReportModal()">❌ Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- DIRECT ORDER / BOOK ONLINE MISTRI MODAL -->
+<div id="directOrderModal" class="modal-backdrop">
+  <div class="bill-sheet" onclick="event.stopPropagation()">
+    <div class="bill-header">
+      <h3 style="color:#1e3a8a;">📦 Mistri Ko Direct Order / Book Karein</h3>
+      <div id="directOrderWorkerMeta" style="font-size:11.5px; color:#15803d; font-weight:600;"></div>
+    </div>
+    <form onsubmit="submitOwnerDirectOrder(event)">
+      <label>Customer Ka Naam</label>
+      <input type="text" id="doCustName" placeholder="Customer naam likhein" required />
+
+      <label>Customer Mobile (10-digit)</label>
+      <input type="tel" id="doCustPhone" placeholder="98xxxxxxxx" maxlength="15" required />
+
+      <label>Branch</label>
+      <select id="doBranch">
+        <option value="Khagaria Main Branch">1. Khagaria (Main Branch)</option>
+        <option value="Maheshkhunt Branch">2. Maheshkhunt Branch</option>
+        <option value="Beldaur Branch">3. Beldaur Branch</option>
+        <option value="Alamnagar - Khurhan Branch">4. Alamnagar - Khurhan Branch</option>
+      </select>
+
+      <label>Service / Kaam</label>
+      <select id="doService">
+        <option value="AC Repair & Service">AC Repair & Service</option>
+        <option value="Fridge / Refrigerator Repair">Fridge / Refrigerator Repair</option>
+        <option value="Washing Machine Repair">Washing Machine Repair</option>
+        <option value="Fan / Cooler / Motor Winding">Fan / Cooler / Motor Winding</option>
+        <option value="House Wiring & Inverter">House Wiring & Inverter</option>
+        <option value="RO / Water Purifier & Geyser">RO / Water Purifier & Geyser</option>
+        <option value="Computer / Printer / CCTV">Computer / Printer / CCTV</option>
+      </select>
+
+      <label>Pura Address</label>
+      <input type="text" id="doAddress" placeholder="Gaon / Mohalla, Post, Thana" required />
+
+      <label>Date</label>
+      <input type="date" id="doDate" required />
+
+      <label>Charge / Fee (₹)</label>
+      <input type="number" id="doAmount" value="400" min="50" required />
+
+      <div style="margin-top:8px; display:flex; gap:8px;">
+        <button type="submit" class="btn btn-success btn-sm" style="flex:1;">✅ Book & Order Bhejein</button>
+        <button type="button" class="btn btn-danger btn-sm" style="flex:1;" onclick="closeDirectOrderModal()">❌ Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- DIGITAL BILL MODAL -->
+<div id="billModal" class="modal-backdrop">
+  <div class="bill-sheet" onclick="event.stopPropagation()">
+    <div class="bill-header">
+      <h3 style="color:#1e3a8a;">🧾 Apna Technical Services</h3>
+      <div style="font-size:11px; color:#475569;">Official Service Receipt | 9693654168</div>
+    </div>
+    <div id="billContent"></div>
+    <div style="margin-top:12px; display:flex; gap:8px;">
+      <button type="button" class="btn btn-success btn-sm" style="flex:1;" onclick="window.print()">🖨️ Print / Save PDF</button>
+      <button type="button" class="btn btn-danger btn-sm" style="flex:1;" onclick="closeBillModal()">❌ Band Karein</button>
+    </div>
+  </div>
+</div>
+
+<!-- TECHNICIAN ASSIGN MODAL -->
+<div id="assignModal" class="modal-backdrop">
+  <div class="bill-sheet" onclick="event.stopPropagation()">
+    <div class="bill-header">
+      <h3 style="color:#1e3a8a;">👷 Technician Assign Karein</h3>
+      <div id="assignBookingMeta" style="font-size:11.5px; color:#475569;"></div>
+    </div>
+    <label>Technician Select Karein:</label>
+    <select id="assignWorkerSelect"></select>
+    <div style="margin-top:8px; display:flex; gap:8px;">
+      <button type="button" class="btn btn-success btn-sm" style="flex:1;" onclick="confirmAssignWorker()">✅ Assign & Save</button>
+      <button type="button" class="btn btn-danger btn-sm" style="flex:1;" onclick="closeAssignModal()">❌ Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc, onSnapshot, query, orderBy, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth, RecaptchaVerifier, signInWithPhoneNumber, signInAnonymously, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getStorage, ref, uploadString, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCiVIJ7zSmy2DpVuRcDS49y0wKDsZR3G_g",
+  authDomain: "apna-technical-services.firebaseapp.com",
+  projectId: "apna-technical-services",
+  storageBucket: "apna-technical-services.firebasestorage.app",
+  appId: "1:806774256267:android:e40a2a735420bae5df5a0e"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+const storage = getStorage(app);
+
+const DEFAULT_VISITING_FEE = 400;
+const MAX_RADIUS_KM = 25;
+const ONLINE_STALE_MS = 30 * 60 * 1000;
+
+const BRANCH_COORDS = {
+  "Khagaria Main Branch": { lat: 25.5026, lng: 86.4767 },
+  "Maheshkhunt Branch": { lat: 25.4320, lng: 86.4040 },
+  "Beldaur Branch": { lat: 25.4950, lng: 86.7250 },
+  "Alamnagar - Khurhan Branch": { lat: 25.5550, lng: 86.9350 }
+};
+
+let currentPortal = localStorage.getItem("ats_active_portal") || "customer";
+let currentOwner = null;
+let activeWorker = null;
+let firebaseUser = null;
+
+let bookings = [];
+let customerTrackedBookings = [];
+let workerLocations = {};
+let pendingWorkers = {};
+let approvedWorkers = {};
+let workerProfiles = {};
+let feedbacks = [];
+let unsubListeners = [];
+
+let kycDraftPhotos = {
+  aadhaarPhotoUrl: "",
+  panPhotoUrl: "",
+  selfiePhotoUrl: ""
+};
+
+let jobReportDraft = {
+  docId: null,
+  afterPhoto: "",
+  partPhoto: "",
+  hasSignature: false
+};
+
+let coordsObj = null;
+let calculatedDistKm = null;
+
+const otpState = {
+  owner: { confirmationResult: null, verifiedPhone: null, targetPhone: null },
+  worker: { confirmationResult: null, verifiedPhone: null, targetPhone: null }
+};
+
+let activeRecaptcha = null;
+let activeRecaptchaContainerId = null;
+let activeAssignBookingId = null;
+let activeDirectOrderWorkerPhone = null;
+
+function normalizePhone10(p) {
+  return (p || "").replace(/\D/g, "").slice(-10);
+}
+
+function normalizeAadhaar12(val) {
+  return (val || "").replace(/\D/g, "").slice(0, 12);
+}
+
+function normalizePan10(val) {
+  return (val || "").replace(/[^a-zA-Z0-9]/g, "").toUpperCase().slice(0, 10);
+}
+
+function escapeHtml(str) {
+  return String(str ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function getBookingAmount(b) {
+  const amt = Number(b.finalAmount);
+  return Number.isFinite(amt) && amt > 0 ? amt : DEFAULT_VISITING_FEE;
+}
+
+function haversineKm(lat1, lon1, lat2, lon2) {
+  const toRad = d => (d * Math.PI) / 180;
+  const R = 6371;
+  const dLat = toRad(lat2 - lat1);
+  const dLon = toRad(lon2 - lon1);
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
+  return Number((R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))).toFixed(1));
+}
+
+function compressImageFile(file, maxWidth = 800, quality = 0.65) {
+  return new Promise((resolve, reject) => {
+    if (!file || !file.type.startsWith("image/")) {
+      return reject(new Error("Kripya valid image file chunein."));
+    }
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const img = new Image();
+      img.onload = () => {
+        const scale = img.width > maxWidth ? maxWidth / img.width : 1;
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.round(img.width * scale);
+        canvas.height = Math.round(img.height * scale);
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        const compressedBase64 = canvas.toDataURL("image/jpeg", quality);
+        if (compressedBase64.length > 1400000) {
+          return reject(new Error("Photo size bahut bada hai, thodi low-res photo lein."));
+        }
+        resolve(compressedBase64);
+      };
+      img.onerror = () => reject(new Error("Image load nahi ho saki."));
+      img.src = event.target.result;
+    };
+    reader.onerror = () => reject(new Error("File read error."));
+    reader.readAsDataURL(file);
+  });
+}
+
+async function uploadImageToStorage(folder, key, fieldName, dataUrl) {
+  const path = `${folder}/${key}/${fieldName}_${Date.now()}.jpg`;
+  const storageRef = ref(storage, path);
+  await uploadString(storageRef, dataUrl, "data_url");
+  return await getDownloadURL(storageRef);
+}
+
+function resetRecaptchaInstance() {
+  if (activeRecaptcha) {
+    try { activeRecaptcha.clear(); } catch (_) {}
+    activeRecaptcha = null;
+  }
+  if (activeRecaptchaContainerId) {
+    const el = document.getElementById(activeRecaptchaContainerId);
+    if (el) el.innerHTML = "";
+    activeRecaptchaContainerId = null;
+  }
+}
+
+function getOrCreateRecaptcha(containerId) {
+  if (activeRecaptcha && activeRecaptchaContainerId === containerId) {
+    return activeRecaptcha;
+  }
+  resetRecaptchaInstance();
+  const container = document.getElementById(containerId);
+  if (!container) return null;
+  activeRecaptcha = new RecaptchaVerifier(auth, containerId, { size: "normal" });
+  activeRecaptchaContainerId = containerId;
+  return activeRecaptcha;
+}
+
+window.switchPortal = function(portalName) {
+  currentPortal = portalName;
+  localStorage.setItem("ats_active_portal", portalName);
+
+  ["customer", "technician", "owner"].forEach(p => {
+    document.getElementById("portal-" + p).style.display = p === portalName ? "block" : "none";
+    document.getElementById("tab-" + p).classList.toggle("active", p === portalName);
+  });
+
+  const labelMap = { customer: "Customer", technician: "Mistri / Tech", owner: "Owner" };
+  document.getElementById("headerModeBadge").innerText = labelMap[portalName] || "App";
+
+  if (portalName === "owner") syncOwnerUI();
+  if (portalName === "technician") syncWorkerUI();
+  if (portalName === "customer") renderCustomerBookings();
+};
+
+// ---------------- CUSTOMER ACTIONS ----------------
+window.toggleTxnField = function() {
+  const mode = document.getElementById("custPaymentMode").value;
+  document.getElementById("txnBox").style.display = mode === "UPI" ? "block" : "none";
+};
+
+window.updateDistancePreview = function() {
+  const el = document.getElementById("distInfoText");
+  if (!coordsObj) {
+    calculatedDistKm = null;
+    el.innerText = "Approximate Distance: — KM";
+    return;
+  }
+  const branch = document.getElementById("custBranch").value;
+  const bCoord = BRANCH_COORDS[branch];
+  if (!bCoord) return;
+  calculatedDistKm = haversineKm(coordsObj.lat, coordsObj.lng, bCoord.lat, bCoord.lng);
+  const within = calculatedDistKm <= MAX_RADIUS_KM;
+  el.style.color = within ? "#15803d" : "#dc2626";
+  el.innerText = `Distance from ${branch}: ${calculatedDistKm} KM (${within ? "Service Available" : "25 KM limit se bahar"})`;
+};
+
+window.captureCustomerLocation = function() {
+  if (!navigator.geolocation) return alert("⚠️ Aapka browser GPS support nahi karta.");
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      coordsObj = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+      document.getElementById("custCoords").value = `${coordsObj.lat.toFixed(5)}, ${coordsObj.lng.toFixed(5)}`;
+      updateDistancePreview();
+    },
+    () => alert("⚠️ GPS location allow karein ya address sahi likhein.")
+  );
+};
+
+async function ensureCustomerSession() {
+  if (auth.currentUser) return auth.currentUser;
+  try {
+    const cred = await signInAnonymously(auth);
+    return cred.user;
+  } catch (_) {
+    return null;
+  }
+}
+
+window.submitBooking = async function(e) {
+  e.preventDefault();
+  const name = document.getElementById("custName").value.trim();
+  const phone10 = normalizePhone10(document.getElementById("custPhone").value);
+  const branch = document.getElementById("custBranch").value;
+  const service = document.getElementById("custService").value;
+  const address = document.getElementById("custAddress").value.trim();
+  const date = document.getElementById("custDate").value;
+  const paymentMode = document.getElementById("custPaymentMode").value;
+  const txnId = paymentMode === "UPI"
+    ? (document.getElementById("custTxnId").value.trim() || "UPI-PENDING")
+    : "CASH-ON-VISIT";
+
+  if (phone10.length !== 10) return alert("⚠️ Sahi 10-digit mobile number daalein.");
+  if (calculatedDistKm !== null && calculatedDistKm > MAX_RADIUS_KM) {
+    return alert(`⚠️ Yeh location ${branch} se ${calculatedDistKm} KM door hai. Hamari service ${MAX_RADIUS_KM} KM tak hai.`);
+  }
+
+  const btn = document.getElementById("bookBtn");
+  btn.disabled = true;
+  btn.innerText = "⏳ Booking save ho rahi hai...";
+
+  try {
+    const sessionUser = await ensureCustomerSession();
+    const bookingId = "ATS" + Date.now().toString().slice(-6);
+    const newBooking = {
+      id: bookingId,
+      docId: bookingId,
+      customerUid: sessionUser?.uid || "",
+      customerName: name,
+      customerPhone: phone10,
+      branch,
+      service,
+      address,
+      date,
+      distKm: calculatedDistKm ?? 5,
+      lat: coordsObj?.lat ?? null,
+      lng: coordsObj?.lng ?? null,
+      paymentMode,
+      txnId,
+      upiVerified: false,
+      status: "Pending",
+      visitingFee: DEFAULT_VISITING_FEE,
+      partAmount: 0,
+      partDetails: "",
+      finalAmount: DEFAULT_VISITING_FEE,
+      assignedWorkerName: "",
+      assignedWorkerPhone: "",
+      createdAt: Date.now()
+    };
+    await setDoc(doc(db, "bookings", bookingId), newBooking);
+    customerTrackedBookings = [newBooking, ...customerTrackedBookings.filter(x => x.id !== bookingId)];
+    document.getElementById("trackPhoneInput").value = phone10;
+    document.getElementById("bookingForm").reset();
+    document.getElementById("custDate").valueAsDate = new Date();
+    coordsObj = null;
+    calculatedDistKm = null;
+    updateDistancePreview();
+    renderCustomerBookings();
+    alert(`✅ Booking Confirm! ID: #${bookingId}`);
+  } catch (err) {
+    alert("❌ Booking Error: " + err.message);
+  } finally {
+    btn.disabled = false;
+    btn.innerText = "✅ Booking Confirm Karein (₹400)";
+  }
+};
+
+async function fetchCustomerBookingsByPhone(phone10) {
+  try {
+    await ensureCustomerSession();
+    const snap = await getDocs(query(collection(db, "bookings"), where("customerPhone", "==", phone10)));
+    customerTrackedBookings = snap.docs
+      .map(d => ({ docId: d.id, ...d.data() }))
+      .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+  } catch (_) {}
+}
+
+window.renderCustomerBookings = async function() {
+  const phone10 = normalizePhone10(document.getElementById("trackPhoneInput").value);
+  const listEl = document.getElementById("customerBookingsList");
+  if (phone10.length !== 10) {
+    listEl.innerHTML = `<p style="font-size:12px; color:#64748b;">10-digit mobile number daalkar apni bookings dekhein.</p>`;
+    return;
+  }
+
+  let sourceList = bookings.length
+    ? bookings.filter(b => normalizePhone10(b.customerPhone) === phone10)
+    : customerTrackedBookings.filter(b => normalizePhone10(b.customerPhone) === phone10);
+
+  if (!sourceList.length) {
+    await fetchCustomerBookingsByPhone(phone10);
+    sourceList = bookings.length
+      ? bookings.filter(b => normalizePhone10(b.customerPhone) === phone10)
+      : customerTrackedBookings.filter(b => normalizePhone10(b.customerPhone) === phone10);
+  }
+
+  sourceList = [...sourceList].sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+
+  if (!sourceList.length) {
+    listEl.innerHTML = `<p style="font-size:12px; color:#64748b;">Is number par koi booking nahi mili.</p>`;
+    return;
+  }
+
+  listEl.innerHTML = sourceList.map(b => {
+    const payBadge = b.upiVerified
+      ? `<span class="badge badge-paid">UPI Verified</span>`
+      : `<span class="badge badge-pending">${escapeHtml(b.paymentMode || "Pending")}</span>`;
+    return `
+      <div class="order-item">
+        <div style="display:flex; justify-content:space-between;">
+          <strong>#${escapeHtml(b.id)} - ${escapeHtml(b.service)}</strong>
+          <span class="badge">${escapeHtml(b.status || "Pending")}</span>
+        </div>
+        <div><strong>Branch:</strong> ${escapeHtml(b.branch)} | <strong>Total Bill:</strong> ₹${getBookingAmount(b)}</div>
+        <div><strong>Date:</strong> ${escapeHtml(b.date)} | ${payBadge}</div>
+        ${b.assignedWorkerName ? `<div><strong>Technician:</strong> ${escapeHtml(b.assignedWorkerName)} (${escapeHtml(b.assignedWorkerPhone || "")})</div>` : `<div><strong>Technician:</strong> Jaldi assign kiya jayega</div>`}
+      </div>
+    `;
+  }).join("");
+};
+
+window.submitFeedback = async function(e) {
+  e.preventDefault();
+  await ensureCustomerSession();
+  await addDoc(collection(db, "feedbacks"), {
+    name: document.getElementById("fbName").value.trim(),
+    rating: Number(document.getElementById("fbRating").value),
+    comment: document.getElementById("fbComment").value.trim(),
+    createdAt: Date.now()
+  });
+  e.target.reset();
+  alert("⭐ Dhanyawad! Aapka feedback save ho gaya hai.");
+};
+
+// ---------------- SHARED OTP FLOW FOR OWNER & MISTRI / TECH ----------------
+function getRoleDomConfig(role) {
+  if (role === "owner") {
+    return {
+      phoneInputId: "loginPhone",
+      otpInputId: "otpCodeInput",
+      statusId: "otpStatusText",
+      recaptchaId: "recaptcha-container"
+    };
+  }
+  return {
+    phoneInputId: "wLoginPhone",
+    otpInputId: "wOtpInput",
+    statusId: "wOtpStatus",
+    recaptchaId: "worker-recaptcha-container"
+  };
+}
+
+window.onOtpPhoneChange = function(role) {
+  const cfg = getRoleDomConfig(role);
+  const current10 = normalizePhone10(document.getElementById(cfg.phoneInputId).value);
+  const state = otpState[role];
+  if (state.verifiedPhone && current10 !== state.verifiedPhone) {
+    state.verifiedPhone = null;
+  }
+  if (state.targetPhone && current10 !== state.targetPhone) {
+    state.confirmationResult = null;
+    state.targetPhone = null;
+    const statusEl = document.getElementById(cfg.statusId);
+    statusEl.style.color = "#b45309";
+    statusEl.innerText = "⚠️ Mobile number badla gaya hai, naye number par OTP bhejein.";
+  }
+};
+
+window.sendOtpForRole = async function(role) {
+  const cfg = getRoleDomConfig(role);
+  const phone10 = normalizePhone10(document.getElementById(cfg.phoneInputId).value);
+  if (phone10.length !== 10) return alert("⚠️ Kripya sahi 10-digit mobile number daalein.");
+
+  const statusEl = document.getElementById(cfg.statusId);
+  statusEl.style.color = "#475569";
+  statusEl.innerText = `⏳ +91${phone10} par OTP bheja ja raha hai...`;
+
+  try {
+    const verifier = getOrCreateRecaptcha(cfg.recaptchaId);
+    const fullPhone = "+91" + phone10;
+    const confirmation = await signInWithPhoneNumber(auth, fullPhone, verifier);
+    otpState[role].confirmationResult = confirmation;
+    otpState[role].targetPhone = phone10;
+    otpState[role].verifiedPhone = null;
+    statusEl.style.color = "#16a34a";
+    statusEl.innerText = `📲 ${fullPhone} par OTP bhej diya gaya hai!`;
+  } catch (err) {
+    resetRecaptchaInstance();
+    statusEl.style.color = "#dc2626";
+    statusEl.innerText = "❌ OTP Error: " + err.message;
+  }
+};
+
+window.verifyOtpForRole = async function(role) {
+  const cfg = getRoleDomConfig(role);
+  const code = document.getElementById(cfg.otpInputId).value.trim();
+  const phone10 = normalizePhone10(document.getElementById(cfg.phoneInputId).value);
+  const statusEl = document.getElementById(cfg.statusId);
+  const state = otpState[role];
+
+  if (!state.confirmationResult || state.targetPhone !== phone10) {
+    return alert(`⚠️ Pehle +91${phone10 || "mobile number"} par OTP bhejein.`);
+  }
+  if (!code) return alert("⚠️ Kripya 6-digit OTP daalein.");
+
+  try {
+    await state.confirmationResult.confirm(code);
+    state.verifiedPhone = phone10;
+    statusEl.style.color = "#16a34a";
+    statusEl.innerText = `✅ +91${phone10} OTP Verify Ho Gaya!`;
+    await resolveRoleForAuthUser(auth.currentUser, role);
+  } catch (err) {
+    alert("❌ OTP Verification Failed: " + err.message);
+  }
+};
+
+// ---------------- MISTRI / TECHNICIAN / LABOUR ACTIONS, KYC & ONLINE DUTY ----------------
+window.toggleKycPayoutFields = function() {
+  const mode = document.getElementById("kycPayoutMode").value;
+  document.getElementById("kycBankBox").style.display = mode === "Bank Account" ? "block" : "none";
+  document.getElementById("kycUpiBox").style.display = mode === "UPI" ? "block" : "none";
+};
+
+function renderKycDraftPreview() {
+  const grid = document.getElementById("kycPreviewGrid");
+  if (!grid) return;
+  const items = [
+    { label: "Aadhaar", url: kycDraftPhotos.aadhaarPhotoUrl },
+    { label: "PAN Card", url: kycDraftPhotos.panPhotoUrl },
+    { label: "Selfie", url: kycDraftPhotos.selfiePhotoUrl }
+  ];
+  grid.innerHTML = items.map(it => it.url
+    ? `<div class="proof-card"><strong>${it.label}</strong><img src="${escapeHtml(it.url)}" alt="${it.label}" /></div>`
+    : `<div class="proof-card"><strong>${it.label}</strong><div style="height:85px; display:flex; align-items:center; justify-content:center; color:#94a3b8;">Pending</div></div>`
+  ).join("");
+}
+
+function isWorkerCurrentlyOnline(phoneKey) {
+  const clean = normalizePhone10(phoneKey) || phoneKey;
+  const prof = workerProfiles[clean] || approvedWorkers[clean] || {};
+  const loc = workerLocations[clean];
+  const recentLoc = loc && typeof loc.updatedAt === "number" && (Date.now() - loc.updatedAt) <= ONLINE_STALE_MS;
+  return Boolean(prof.isOnline === true || recentLoc);
+}
+
+function syncWorkerOnlineDutyBadge() {
+  if (!activeWorker) return;
+  const online = isWorkerCurrentlyOnline(activeWorker.phone);
+  const badge = document.getElementById("wOnlineStatusBadge");
+  const btn = document.getElementById("toggleOnlineDutyBtn");
+  if (!badge || !btn) return;
+
+  if (online) {
+    badge.className = "badge badge-paid";
+    badge.innerText = "🟢 Online (Duty Active)";
+    btn.className = "btn btn-danger btn-sm";
+    btn.innerText = "🔴 Offline Karein";
+  } else {
+    badge.className = "badge";
+    badge.innerText = "⚫ Offline";
+    btn.className = "btn btn-success btn-sm";
+    btn.innerText = "🟢 Online Aayein";
+  }
+}
+
+window.toggleWorkerOnlineDuty = async function() {
+  if (!activeWorker) return;
+  const currentlyOnline = isWorkerCurrentlyOnline(activeWorker.phone);
+  const nextOnline = !currentlyOnline;
+
+  try {
+    await setDoc(doc(db, "workerProfiles", activeWorker.phone), {
+      isOnline: nextOnline,
+      onlineUpdatedAt: Date.now()
+    }, { merge: true });
+    activeWorker.isOnline = nextOnline;
+    syncWorkerOnlineDutyBadge();
+
+    if (nextOnline) {
+      shareWorkerLocation();
+      alert("🟢 Aap ab Online hain! Owner aapko ab direct order/booking de sakta hai.");
+    } else {
+      alert("🔴 Aap ab Offline ho gaye hain.");
+    }
+  } catch (err) {
+    alert("❌ Status Update Error: " + err.message);
+  }
+};
+
+function syncWorkerUI() {
+  if (!activeWorker) {
+    document.getElementById("workerAuthCard").style.display = "block";
+    document.getElementById("workerPanel").style.display = "none";
+    return;
+  }
+  document.getElementById("workerAuthCard").style.display = "none";
+  document.getElementById("workerPanel").style.display = "block";
+  document.getElementById("wWelcomeText").innerText = `Namaste, ${activeWorker.name}!`;
+  document.getElementById("wMetaText").innerText = `${activeWorker.subRole || "Mistri / Tech"} • ${activeWorker.branch || "Khagaria Main Branch"} • 📞 ${activeWorker.phone}`;
+
+  const nameInput = document.getElementById("kycWorkerName");
+  if (document.activeElement !== nameInput) nameInput.value = activeWorker.name || "";
+  const aadhaarInput = document.getElementById("kycAadhaarNumber");
+  if (document.activeElement !== aadhaarInput) aadhaarInput.value = activeWorker.aadhaarNumber || "";
+  const panInput = document.getElementById("kycPanNumber");
+  if (document.activeElement !== panInput) panInput.value = activeWorker.panNumber || "";
+  const payoutSelect = document.getElementById("kycPayoutMode");
+  if (document.activeElement !== payoutSelect) payoutSelect.value = activeWorker.payoutMode || "Bank Account";
+  const bankAccInput = document.getElementById("kycBankAccount");
+  if (document.activeElement !== bankAccInput) bankAccInput.value = activeWorker.bankAccountNumber || "";
+  const bankIfscInput = document.getElementById("kycBankIfsc");
+  if (document.activeElement !== bankIfscInput) bankIfscInput.value = activeWorker.bankIfsc || "";
+  const bankHolderInput = document.getElementById("kycBankHolder");
+  if (document.activeElement !== bankHolderInput) bankHolderInput.value = activeWorker.bankHolderName || "";
+  const upiInput = document.getElementById("kycUpiId");
+  if (document.activeElement !== upiInput) upiInput.value = activeWorker.upiId || "";
+  toggleKycPayoutFields();
+
+  if (!kycDraftPhotos.aadhaarPhotoUrl && activeWorker.aadhaarPhotoUrl) kycDraftPhotos.aadhaarPhotoUrl = activeWorker.aadhaarPhotoUrl;
+  if (!kycDraftPhotos.panPhotoUrl && activeWorker.panPhotoUrl) kycDraftPhotos.panPhotoUrl = activeWorker.panPhotoUrl;
+  if (!kycDraftPhotos.selfiePhotoUrl && activeWorker.selfiePhotoUrl) kycDraftPhotos.selfiePhotoUrl = activeWorker.selfiePhotoUrl;
+  renderKycDraftPreview();
+
+  const kycStatus = activeWorker.kycStatus || (activeWorker.approvedAt ? "Approved" : "Pending");
+  const badgeEl = document.getElementById("wKycBadge");
+  const kycCard = document.getElementById("workerKycCard");
+  const workArea = document.getElementById("workerActiveWorkArea");
+  const instrBox = document.getElementById("kycInstructionBox");
+
+  if (kycStatus === "Approved") {
+    badgeEl.className = "badge badge-paid";
+    badgeEl.innerText = "KYC Approved by Owner";
+    kycCard.style.display = "none";
+    workArea.style.display = "block";
+    syncWorkerOnlineDutyBadge();
+    renderAssignedJobs();
+  } else {
+    workArea.style.display = "none";
+    kycCard.style.display = "block";
+    if (kycStatus === "Submitted") {
+      badgeEl.className = "badge badge-pending";
+      badgeEl.innerText = "KYC Sent — Waiting for Owner Approval";
+      instrBox.innerHTML = "Aapki <strong>Aadhaar, PAN, Bank/UPI aur Selfie</strong> Owner ke paas bhej di gayi hai. Owner ke approve karte hi kaam shuru hoga.";
+    } else if (kycStatus === "Rejected") {
+      badgeEl.className = "badge";
+      badgeEl.style.background = "#fee2e2";
+      badgeEl.style.color = "#991b1b";
+      badgeEl.innerText = "KYC Rejected — Dobara Submit Karein";
+      instrBox.innerHTML = "Aapki pichhli KYC reject hui hai. Kripya sahi <strong>Aadhaar, PAN, Bank/UPI aur teeno photos</strong> dobara submit karein.";
+    } else {
+      badgeEl.className = "badge badge-pending";
+      badgeEl.innerText = "KYC Pending — Details & Photos Required";
+      instrBox.innerHTML = "Login ke baad <strong>Aadhaar Card Number</strong>, <strong>PAN Card Number</strong>, <strong>Bank Account ya UPI ID</strong>, aur teeno photos (<strong>Aadhaar</strong>, <strong>PAN</strong>, <strong>Selfie</strong>) bhar kar submit karein. Uske baad <strong>Owner</strong> approve karega.";
+    }
+  }
+}
+
+window.handleKycPhotoSelect = async function(fieldName, inputEl) {
+  if (!activeWorker) return;
+  const file = inputEl.files && inputEl.files[0];
+  if (!file) return;
+  try {
+    inputEl.disabled = true;
+    const compressed = await compressImageFile(file, 800, 0.65);
+    let finalUrl = compressed;
+    try {
+      finalUrl = await uploadImageToStorage("worker-kyc", activeWorker.phone, fieldName, compressed);
+    } catch (storageErr) {
+      console.warn("Storage upload fallback:", storageErr?.message || storageErr);
+    }
+    kycDraftPhotos[fieldName] = finalUrl;
+    renderKycDraftPreview();
+  } catch (err) {
+    alert("❌ Photo Error: " + err.message);
+  } finally {
+    inputEl.disabled = false;
+  }
+};
+
+window.submitWorkerKycForApproval = async function() {
+  if (!activeWorker) return;
+
+  const enteredName = (document.getElementById("kycWorkerName").value || "").trim() || activeWorker.name || `Mistri (${activeWorker.phone})`;
+  const aadhaarNumber = normalizeAadhaar12(document.getElementById("kycAadhaarNumber").value);
+  const panNumber = normalizePan10(document.getElementById("kycPanNumber").value);
+  const payoutMode = document.getElementById("kycPayoutMode").value;
+  const bankAccountNumber = document.getElementById("kycBankAccount").value.trim().replace(/\s+/g, "");
+  const bankIfsc = document.getElementById("kycBankIfsc").value.trim().toUpperCase().replace(/\s+/g, "");
+  const bankHolderName = document.getElementById("kycBankHolder").value.trim();
+  const upiId = document.getElementById("kycUpiId").value.trim().toLowerCase();
+
+  if (aadhaarNumber.length !== 12) return alert("⚠️ Kripya sahi 12-digit Aadhaar Card Number daalein.");
+  if (!/^[A-Z]{5}[0-9]{4}[A-Z]$/.test(panNumber)) return alert("⚠️ Kripya sahi 10-character PAN Card Number daalein (jaise: ABCDE1234F).");
+
+  if (payoutMode === "Bank Account") {
+    if (bankAccountNumber.length < 8) return alert("⚠️ Kripya sahi Bank Account Number daalein.");
+    if (!/^[A-Z]{4}0[A-Z0-9]{6}$/.test(bankIfsc)) return alert("⚠️ Kripya sahi 11-character IFSC Code daalein (jaise: SBIN0001234).");
+  } else {
+    if (!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+$/.test(upiId)) return alert("⚠️ Kripya sahi UPI ID daalein (jaise: naam@ybl).");
+  }
+
+  if (!kycDraftPhotos.aadhaarPhotoUrl || !kycDraftPhotos.panPhotoUrl || !kycDraftPhotos.selfiePhotoUrl) {
+    return alert("⚠️ Kripya Aadhaar Card, PAN Card aur Selfie teeno photo upload karein.");
+  }
+
+  const btn = document.getElementById("submitKycBtn");
+  btn.disabled = true;
+  btn.innerText = "⏳ KYC bheja ja raha hai...";
+
+  try {
+    const updatedPayload = {
+      name: enteredName,
+      subRole: activeWorker.subRole || "Mistri / Tech",
+      branch: activeWorker.branch || "Khagaria Main Branch",
+      workDetails: activeWorker.workDetails || "",
+      phone: activeWorker.phone,
+      aadhaarNumber,
+      panNumber,
+      payoutMode,
+      bankAccountNumber: payoutMode === "Bank Account" ? bankAccountNumber : "",
+      bankIfsc: payoutMode === "Bank Account" ? bankIfsc : "",
+      bankHolderName: payoutMode === "Bank Account" ? bankHolderName : "",
+      upiId: payoutMode === "UPI" ? upiId : "",
+      aadhaarPhotoUrl: kycDraftPhotos.aadhaarPhotoUrl,
+      panPhotoUrl: kycDraftPhotos.panPhotoUrl,
+      selfiePhotoUrl: kycDraftPhotos.selfiePhotoUrl,
+      kycStatus: "Submitted",
+      kycSubmittedAt: Date.now()
+    };
+    await setDoc(doc(db, "workerProfiles", activeWorker.phone), updatedPayload, { merge: true });
+    activeWorker = { ...activeWorker, ...updatedPayload };
+    syncWorkerUI();
+    alert("✅ Aapki Aadhaar, PAN, Bank/UPI aur Selfie KYC Owner ke paas approval ke liye bhej di gayi hai!");
+  } catch (err) {
+    alert("❌ KYC Submit Error: " + err.message);
+  } finally {
+    btn.disabled = false;
+    btn.innerText = "📤 Owner Approval Ke Liye KYC Bhejein";
+  }
+};
+
+window.registerPendingWorker = async function(e) {
+  e.preventDefault();
+  const phone10 = normalizePhone10(document.getElementById("wRegPhone").value);
+  if (phone10.length !== 10) return alert("⚠️ Sahi 10-digit mobile number daalein.");
+  await ensureCustomerSession();
+  const payload = {
+    name: document.getElementById("wRegName").value.trim(),
+    subRole: document.getElementById("wRegRole").value.trim(),
+    branch: document.getElementById("wRegBranch").value,
+    workDetails: document.getElementById("wRegDetails").value.trim(),
+    phone: phone10,
+    kycStatus: "Pending",
+    isOnline: false,
+    requestedAt: Date.now()
+  };
+  await setDoc(doc(db, "pendingWorkers", phone10), payload, { merge: true });
+  await setDoc(doc(db, "workerProfiles", phone10), payload, { merge: true });
+  e.target.reset();
+  alert("✅ Registration save ho gaya hai! Ab apna number daalkar OTP se login karein aur Aadhaar, PAN, Bank/UPI & Selfie bhar kar submit karein.");
+};
+
+window.shareWorkerLocation = function() {
+  if (!activeWorker) return;
+  if (!navigator.geolocation) return alert("⚠️ GPS support nahi hai.");
+  const label = document.getElementById("gpsStatusLabel");
+  label.innerText = "⏳ GPS fetch ho raha hai...";
+  navigator.geolocation.getCurrentPosition(async (pos) => {
+    const lat = pos.coords.latitude;
+    const lng = pos.coords.longitude;
+    const nowTs = Date.now();
+    await setDoc(doc(db, "workerLocations", activeWorker.phone), {
+      lat, lng, updatedAt: nowTs
+    }, { merge: true });
+    await setDoc(doc(db, "workerProfiles", activeWorker.phone), {
+      isOnline: true, onlineUpdatedAt: nowTs
+    }, { merge: true });
+    activeWorker.isOnline = true;
+    syncWorkerOnlineDutyBadge();
+    label.innerText = `✅ Live (${lat.toFixed(4)}, ${lng.toFixed(4)})`;
+  }, () => {
+    label.innerText = "❌ GPS permission denied";
+  });
+};
+
+// ---------------- SIGNATURE PAD & JOB COMPLETION REPORT ----------------
+let sigCtx = null;
+let isDrawingSig = false;
+
+function initSignaturePad() {
+  const canvas = document.getElementById("customerSigCanvas");
+  if (!canvas) return;
+  const rect = canvas.getBoundingClientRect();
+  const targetW = Math.max(260, Math.floor(rect.width || 360));
+  const targetH = 130;
+  canvas.width = targetW;
+  canvas.height = targetH;
+
+  sigCtx = canvas.getContext("2d");
+  sigCtx.lineWidth = 2.4;
+  sigCtx.lineCap = "round";
+  sigCtx.strokeStyle = "#0f172a";
+
+  const getPos = (evt) => {
+    const r = canvas.getBoundingClientRect();
+    const touch = evt.touches && evt.touches[0];
+    const clientX = touch ? touch.clientX : evt.clientX;
+    const clientY = touch ? touch.clientY : evt.clientY;
+    const scaleX = canvas.width / Math.max(1, r.width);
+    const scaleY = canvas.height / Math.max(1, r.height);
+    return {
+      x: (clientX - r.left) * scaleX,
+      y: (clientY - r.top) * scaleY
+    };
+  };
+
+  const startDraw = (evt) => {
+    evt.preventDefault();
+    isDrawingSig = true;
+    const p = getPos(evt);
+    sigCtx.beginPath();
+    sigCtx.moveTo(p.x, p.y);
+  };
+
+  const moveDraw = (evt) => {
+    if (!isDrawingSig) return;
+    evt.preventDefault();
+    const p = getPos(evt);
+    sigCtx.lineTo(p.x, p.y);
+    sigCtx.stroke();
+    jobReportDraft.hasSignature = true;
+  };
+
+  const endDraw = () => {
+    isDrawingSig = false;
+  };
+
+  canvas.onmousedown = startDraw;
+  canvas.onmousemove = moveDraw;
+  window.onmouseup = endDraw;
+  canvas.ontouchstart = startDraw;
+  canvas.ontouchmove = moveDraw;
+  canvas.ontouchend = endDraw;
+}
+
+function exportWhiteBackgroundSignatureDataUrl(sourceCanvas) {
+  const tempCanvas = document.createElement("canvas");
+  tempCanvas.width = sourceCanvas.width;
+  tempCanvas.height = sourceCanvas.height;
+  const tCtx = tempCanvas.getContext("2d");
+  tCtx.fillStyle = "#ffffff";
+  tCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+  tCtx.drawImage(sourceCanvas, 0, 0);
+  return tempCanvas.toDataURL("image/png");
+}
+
+window.clearCustomerSignaturePad = function() {
+  const canvas = document.getElementById("customerSigCanvas");
+  if (!canvas || !sigCtx) return;
+  sigCtx.clearRect(0, 0, canvas.width, canvas.height);
+  jobReportDraft.hasSignature = false;
+};
+
+window.recalcJobReportTotal = function() {
+  const vFee = Number(document.getElementById("jrVisitingFee")?.value) || 0;
+  const pAmt = Number(document.getElementById("jrPartAmount")?.value) || 0;
+  const total = Math.max(0, vFee + pAmt);
+  document.getElementById("jrTotalBillText").innerText = `₹${total.toLocaleString("en-IN")}`;
+};
+
+function renderJobReportPhotoPreviews() {
+  const wDiv = document.getElementById("jrWorkPhotoPreview");
+  const pDiv = document.getElementById("jrPartPhotoPreview");
+  if (wDiv) {
+    wDiv.innerHTML = jobReportDraft.afterPhoto
+      ? `<img src="${escapeHtml(jobReportDraft.afterPhoto)}" alt="Kaam Photo" class="sig-preview-img" />`
+      : "";
+  }
+  if (pDiv) {
+    pDiv.innerHTML = jobReportDraft.partPhoto
+      ? `<img src="${escapeHtml(jobReportDraft.partPhoto)}" alt="Samaan Photo" class="sig-preview-img" />`
+      : "";
+  }
+}
+
+window.openJobReportModal = function(docId) {
+  const b = bookings.find(item => (item.docId || item.id) === docId);
+  if (!b) return;
+  jobReportDraft = {
+    docId,
+    afterPhoto: b.afterPhoto || "",
+    partPhoto: b.partPhoto || "",
+    hasSignature: Boolean(b.customerSignature)
+  };
+  document.getElementById("jobReportMeta").innerText = `Booking #${b.id || docId} — ${b.customerName || ""} (${b.service || ""})`;
+  document.getElementById("jrWorkPhotoInput").value = "";
+  document.getElementById("jrPartPhotoInput").value = "";
+  document.getElementById("jrPartDetails").value = b.partDetails || "";
+  document.getElementById("jrVisitingFee").value = b.visitingFee ?? DEFAULT_VISITING_FEE;
+  document.getElementById("jrPartAmount").value = b.partAmount ?? 0;
+  recalcJobReportTotal();
+  renderJobReportPhotoPreviews();
+  document.getElementById("jobReportModal").classList.add("open");
+  requestAnimationFrame(() => {
+    initSignaturePad();
+    clearCustomerSignaturePad();
+  });
+};
+
+window.closeJobReportModal = function() {
+  jobReportDraft.docId = null;
+  document.getElementById("jobReportModal").classList.remove("open");
+};
+
+window.handleJobReportPhoto = async function(fieldName, inputEl) {
+  const file = inputEl.files && inputEl.files[0];
+  if (!file) return;
+  try {
+    inputEl.disabled = true;
+    const compressed = await compressImageFile(file, 800, 0.65);
+    let finalUrl = compressed;
+    try {
+      finalUrl = await uploadImageToStorage("work-proofs", jobReportDraft.docId || "job", fieldName, compressed);
+    } catch (_) {}
+    jobReportDraft[fieldName] = finalUrl;
+    renderJobReportPhotoPreviews();
+  } catch (err) {
+    alert("❌ Photo Error: " + err.message);
+  } finally {
+    inputEl.disabled = false;
+  }
+};
+
+window.submitJobCompletionReport = async function(e) {
+  e.preventDefault();
+  if (!jobReportDraft.docId) return;
+  if (!jobReportDraft.afterPhoto) {
+    return alert("⚠️ Kripya kiye gaye kaam ki photo upload karein.");
+  }
+  if (!jobReportDraft.hasSignature) {
+    return alert("⚠️ Kripya bill pad par customer ka signature lein.");
+  }
+
+  const vFee = Math.max(0, Number(document.getElementById("jrVisitingFee").value) || 0);
+  const pAmt = Math.max(0, Number(document.getElementById("jrPartAmount").value) || 0);
+  const totalBill = vFee + pAmt;
+  const partDetails = document.getElementById("jrPartDetails").value.trim();
+
+  const sigCanvas = document.getElementById("customerSigCanvas");
+  const sigDataUrl = exportWhiteBackgroundSignatureDataUrl(sigCanvas);
+
+  const btn = document.getElementById("jrSubmitBtn");
+  btn.disabled = true;
+  btn.innerText = "⏳ Owner ko bheja ja raha hai...";
+
+  try {
+    let signatureUrl = sigDataUrl;
+    try {
+      signatureUrl = await uploadImageToStorage("work-proofs", jobReportDraft.docId, "customer_signature", sigDataUrl);
+    } catch (_) {}
+
+    const updatePayload = {
+      status: "Completed",
+      afterPhoto: jobReportDraft.afterPhoto,
+      partPhoto: jobReportDraft.partPhoto || "",
+      partDetails,
+      visitingFee: vFee,
+      partAmount: pAmt,
+      finalAmount: totalBill,
+      customerSignature: signatureUrl,
+      completedAt: Date.now()
+    };
+
+    await updateDoc(doc(db, "bookings", jobReportDraft.docId), updatePayload);
+    closeJobReportModal();
+    alert(`✅ Kaam photo, saman photo, Total Bill (₹${totalBill}) aur Customer Signature Owner ko bhej diya gaya hai!`);
+  } catch (err) {
+    alert("❌ Submit Error: " + err.message);
+  } finally {
+    btn.disabled = false;
+    btn.innerText = "📤 Owner Ko Bill & Report Bhejein";
+  }
+};
+
+function renderAssignedJobs() {
+  if (!activeWorker) return;
+  const el = document.getElementById("assignedJobsList");
+  const mine = bookings.filter(b => normalizePhone10(b.assignedWorkerPhone) === activeWorker.phone);
+  if (!mine.length) {
+    el.innerHTML = `<p style="font-size:12px; color:#64748b;">Abhi koi booking assign nahi hui hai.</p>`;
+    return;
+  }
+  el.innerHTML = mine.map(b => {
+    const docKey = escapeHtml(b.docId || b.id);
+    const mapBtn = (b.lat != null && b.lng != null)
+      ? `<a href="https://maps.google.com/?q=${encodeURIComponent(b.lat)},${encodeURIComponent(b.lng)}" target="_blank" rel="noopener" class="btn btn-loc btn-sm">📍 Customer Map</a>`
+      : "";
+    const photos = (b.afterPhoto || b.partPhoto || b.customerSignature)
+      ? `<div class="proof-grid">
+          ${b.afterPhoto ? `<div class="proof-card"><strong>Kaam Photo</strong><img src="${escapeHtml(b.afterPhoto)}" alt="Kaam"/></div>` : ""}
+          ${b.partPhoto ? `<div class="proof-card"><strong>Samaan Photo</strong><img src="${escapeHtml(b.partPhoto)}" alt="Samaan"/></div>` : ""}
+          ${b.customerSignature ? `<div class="proof-card"><strong>Signature</strong><img src="${escapeHtml(b.customerSignature)}" alt="Signature"/></div>` : ""}
+        </div>`
+      : "";
+
+    return `
+      <div class="order-item">
+        <div style="display:flex; justify-content:space-between;">
+          <strong>#${escapeHtml(b.id)} - ${escapeHtml(b.service)}</strong>
+          <span class="badge">${escapeHtml(b.status || "Assigned")}</span>
+        </div>
+        <div><strong>Customer:</strong> ${escapeHtml(b.customerName)} | 📞 <a href="tel:${escapeHtml(b.customerPhone)}">${escapeHtml(b.customerPhone)}</a></div>
+        <div><strong>Address:</strong> ${escapeHtml(b.address)}</div>
+        <div><strong>Date:</strong> ${escapeHtml(b.date)} | <strong>Total Bill:</strong> ₹${getBookingAmount(b)}</div>
+        ${b.partDetails ? `<div><strong>Naya Samaan:</strong> ${escapeHtml(b.partDetails)} (₹${Number(b.partAmount || 0)})</div>` : ""}
+        ${mapBtn}
+        <button type="button" class="btn btn-success btn-sm" onclick="openJobReportModal('${docKey}')">
+          🧾 Bill, Samaan Photo & Signature Bhejein
+        </button>
+        ${photos}
+      </div>
+    `;
+  }).join("");
+}
+
+// ---------------- OWNER & FIREBASE AUTH ----------------
+window.handleOwnerLogin = async function(e) {
+  e.preventDefault();
+  const name = document.getElementById("loginName").value.trim();
+  const phone10 = normalizePhone10(document.getElementById("loginPhone").value);
+  if (!auth.currentUser || otpState.owner.verifiedPhone !== phone10) {
+    return alert("⚠️ Pehle daale gaye mobile number par OTP bhejkar verify karein!");
+  }
+  const authorized = await checkOwnerAuthorization(auth.currentUser, phone10);
+  if (!authorized) {
+    return alert("❌ Yeh number Owner list (`owners` collection) mein registered nahi hai.");
+  }
+  currentOwner = { name: name || "Owner", phone: phone10, uid: auth.currentUser.uid };
+  syncOwnerUI();
+};
+
+async function checkOwnerAuthorization(user, phone10) {
+  if (!user) return false;
+  try {
+    const ownerDocByUid = await getDoc(doc(db, "owners", user.uid));
+    if (ownerDocByUid.exists() && ownerDocByUid.data()?.active !== false) return true;
+  } catch (_) {}
+  if (phone10) {
+    try {
+      const ownerDocByPhone = await getDoc(doc(db, "owners", phone10));
+      if (ownerDocByPhone.exists() && ownerDocByPhone.data()?.active !== false) return true;
+    } catch (_) {}
+  }
+  return false;
+}
+
+async function resolveRoleForAuthUser(user, preferredRole = null) {
+  firebaseUser = user || null;
+  if (!user || user.isAnonymous) {
+    currentOwner = null;
+    activeWorker = null;
+    syncOwnerUI();
+    syncWorkerUI();
+    return;
+  }
+
+  const authPhone10 = normalizePhone10(user.phoneNumber || "");
+  const isOwnerAuth = await checkOwnerAuthorization(user, authPhone10);
+
+  let workerData = null;
+  if (authPhone10) {
+    try {
+      const profSnap = await getDoc(doc(db, "workerProfiles", authPhone10));
+      const appSnap = await getDoc(doc(db, "approvedWorkers", authPhone10));
+      const pendSnap = await getDoc(doc(db, "pendingWorkers", authPhone10));
+      const baseProf = profSnap.exists()
+        ? profSnap.data()
+        : (appSnap.exists() ? appSnap.data() : (pendSnap.exists() ? pendSnap.data() : null));
+
+      if (baseProf || preferredRole === "worker") {
+        workerData = {
+          ...(baseProf || {}),
+          name: baseProf?.name || `Mistri (${authPhone10})`,
+          phone: authPhone10,
+          uid: user.uid,
+          kycStatus: baseProf?.kycStatus || (appSnap.exists() ? "Approved" : "Pending")
+        };
+      }
+    } catch (_) {}
+  }
+
+  if (preferredRole === "owner") {
+    if (isOwnerAuth) {
+      const inputName = (document.getElementById("loginName")?.value || "").trim();
+      currentOwner = { name: inputName || "Owner", phone: authPhone10, uid: user.uid };
+      syncOwnerUI();
+    } else {
+      document.getElementById("otpStatusText").style.color = "#dc2626";
+      document.getElementById("otpStatusText").innerText = "❌ Yeh number Owner list mein registered nahi hai.";
+    }
+    return;
+  }
+
+  if (preferredRole === "worker") {
+    activeWorker = workerData;
+    syncWorkerUI();
+    return;
+  }
+
+  if (isOwnerAuth) {
+    const inputName = (document.getElementById("loginName")?.value || "").trim();
+    currentOwner = { name: inputName || "Owner", phone: authPhone10, uid: user.uid };
+    syncOwnerUI();
+  }
+  if (workerData) {
+    activeWorker = workerData;
+    syncWorkerUI();
+  }
+}
+
+window.logoutAuthSession = async function() {
+  currentOwner = null;
+  activeWorker = null;
+  kycDraftPhotos = { aadhaarPhotoUrl: "", panPhotoUrl: "", selfiePhotoUrl: "" };
+  otpState.owner = { confirmationResult: null, verifiedPhone: null, targetPhone: null };
+  otpState.worker = { confirmationResult: null, verifiedPhone: null, targetPhone: null };
+  resetRecaptchaInstance();
+  try {
+    await signOut(auth);
+  } catch (_) {}
+  syncOwnerUI();
+  syncWorkerUI();
+};
+
+function syncOwnerUI() {
+  if (!currentOwner) {
+    document.getElementById("loginFormCard").style.display = "block";
+    document.getElementById("dashboardArea").style.display = "none";
+    return;
+  }
+  document.getElementById("loginFormCard").style.display = "none";
+  document.getElementById("dashboardArea").style.display = "block";
+  document.getElementById("dashWelcome").innerText = `Namaste, ${currentOwner.name}!`;
+  renderOwnerAll();
+}
+
+function getCompletedJobsByWorker() {
+  const counts = {};
+  bookings.forEach(b => {
+    if (b.status === "Completed" && b.assignedWorkerPhone) {
+      const key = normalizePhone10(b.assignedWorkerPhone) || b.assignedWorkerPhone;
+      counts[key] = (counts[key] || 0) + 1;
+    }
+  });
+  return counts;
+}
+
+function renderRevenueSummary() {
+  let verifiedTotal = 0;
+  let pendingTotal = 0;
+  bookings.forEach(b => {
+    const amt = getBookingAmount(b);
+    if (b.upiVerified) verifiedTotal += amt;
+    else if (b.status !== "Cancelled") pendingTotal += amt;
+  });
+  document.getElementById("statVerifiedRevenue").innerText = `₹${verifiedTotal.toLocaleString("en-IN")}`;
+  document.getElementById("statPendingRevenue").innerText = `₹${pendingTotal.toLocaleString("en-IN")}`;
+}
+
+function getMergedApprovedWorkersList() {
+  const merged = {};
+  Object.entries(approvedWorkers).forEach(([k, v]) => {
+    const clean = normalizePhone10(v?.phone || k) || k;
+    if (v && v.name) merged[clean] = { ...v, phone: clean, kycStatus: "Approved" };
+  });
+  Object.entries(workerProfiles).forEach(([k, v]) => {
+    const clean = normalizePhone10(v?.phone || k) || k;
+    if (v && v.name && (v.kycStatus === "Approved" || merged[clean])) {
+      merged[clean] = { ...(merged[clean] || {}), ...v, phone: clean, kycStatus: "Approved" };
+    }
+  });
+  return Object.values(merged);
+}
+
+function renderOnlineWorkersForOwner() {
+  const el = document.getElementById("onlineWorkersList");
+  const countEl = document.getElementById("statOnlineWorkers");
+  if (!el) return;
+
+  const approvedList = getMergedApprovedWorkersList();
+  const onlineList = approvedList.filter(w => isWorkerCurrentlyOnline(w.phone));
+  if (countEl) countEl.innerText = onlineList.length;
+
+  if (!onlineList.length) {
+    el.innerHTML = `<p style="font-size:12px; color:#64748b;">Abhi koi Mistri / Technician / Labour Online nahi hai.</p>`;
+    return;
+  }
+
+  el.innerHTML = onlineList.map(w => {
+    const phoneKey = normalizePhone10(w.phone) || w.phone;
+    const safePhone = escapeHtml(phoneKey);
+    const loc = workerLocations[phoneKey] || workerLocations[w.phone];
+    const hasCoords = loc && typeof loc.lat === "number" && typeof loc.lng === "number";
+    const gpsLink = hasCoords
+      ? `<a href="https://maps.google.com/?q=${encodeURIComponent(loc.lat)},${encodeURIComponent(loc.lng)}" target="_blank" rel="noopener">📍 Live GPS</a>`
+      : "Online";
+
+    return `
+      <div class="order-item online-worker">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:6px;">
+          <strong>🟢 ${escapeHtml(w.name)}</strong>
+          <span class="badge badge-paid">ONLINE</span>
+        </div>
+        <div>(${escapeHtml(w.subRole || "Mistri / Tech")}) • ${escapeHtml(w.branch || "N/A")}</div>
+        <div>📞 <a href="tel:${safePhone}">${safePhone}</a> • ${gpsLink}</div>
+        <button type="button" class="btn btn-success btn-sm" onclick="openDirectOrderModal('${safePhone}')">
+          📦 Direct Book / Order Dein
+        </button>
+      </div>
+    `;
+  }).join("");
+}
+
+window.openDirectOrderModal = function(workerPhone) {
+  const clean = normalizePhone10(workerPhone) || workerPhone;
+  const worker = getMergedApprovedWorkersList().find(w => (normalizePhone10(w.phone) || w.phone) === clean);
+  if (!worker) return alert("⚠️ Mistri / Technician profile nahi mila.");
+  activeDirectOrderWorkerPhone = clean;
+  document.getElementById("directOrderWorkerMeta").innerText = `Online Mistri: ${worker.name} (${worker.subRole || "Mistri / Tech"}) • 📞 ${clean}`;
+  if (worker.branch) {
+    const branchSel = document.getElementById("doBranch");
+    if ([...branchSel.options].some(o => o.value === worker.branch)) {
+      branchSel.value = worker.branch;
+    }
+  }
+  document.getElementById("doDate").valueAsDate = new Date();
+  document.getElementById("doAmount").value = DEFAULT_VISITING_FEE;
+  document.getElementById("directOrderModal").classList.add("open");
+};
+
+window.closeDirectOrderModal = function() {
+  activeDirectOrderWorkerPhone = null;
+  document.getElementById("directOrderModal").classList.remove("open");
+};
+
+window.submitOwnerDirectOrder = async function(e) {
+  e.preventDefault();
+  if (!activeDirectOrderWorkerPhone) return;
+  const worker = getMergedApprovedWorkersList().find(w => (normalizePhone10(w.phone) || w.phone) === activeDirectOrderWorkerPhone);
+  if (!worker) return alert("⚠️ Mistri / Technician nahi mila.");
+
+  const custName = document.getElementById("doCustName").value.trim();
+  const custPhone = normalizePhone10(document.getElementById("doCustPhone").value);
+  const branch = document.getElementById("doBranch").value;
+  const service = document.getElementById("doService").value;
+  const address = document.getElementById("doAddress").value.trim();
+  const date = document.getElementById("doDate").value;
+  const amount = Number(document.getElementById("doAmount").value) || DEFAULT_VISITING_FEE;
+
+  if (custPhone.length !== 10) return alert("⚠️ Sahi 10-digit customer mobile number daalein.");
+
+  const bookingId = "ATS" + Date.now().toString().slice(-6);
+  const newOrder = {
+    id: bookingId,
+    docId: bookingId,
+    customerUid: "",
+    customerName: custName,
+    customerPhone: custPhone,
+    branch,
+    service,
+    address,
+    date,
+    distKm: 5,
+    lat: null,
+    lng: null,
+    paymentMode: "Owner Direct Order",
+    txnId: "DIRECT-ASSIGN",
+    upiVerified: false,
+    status: "Assigned",
+    visitingFee: amount,
+    partAmount: 0,
+    partDetails: "",
+    finalAmount: amount,
+    assignedWorkerName: worker.name,
+    assignedWorkerPhone: activeDirectOrderWorkerPhone,
+    createdByOwner: true,
+    createdAt: Date.now()
+  };
+
+  try {
+    await setDoc(doc(db, "bookings", bookingId), newOrder);
+    e.target.reset();
+    closeDirectOrderModal();
+    alert(`✅ Booking #${bookingId} banakar ${worker.name} ko direct assign kar di gayi hai!`);
+  } catch (err) {
+    alert("❌ Order Error: " + err.message);
+  }
+};
+
+function renderOwnerAll() {
+  document.getElementById("statTotalOrders").innerText = bookings.length;
+  document.getElementById("statPaidOrders").innerText = bookings.filter(b => b.upiVerified).length;
+  document.getElementById("statCompleted").innerText = bookings.filter(b => b.status === "Completed").length;
+  renderOnlineWorkersForOwner();
+  renderRevenueSummary();
+  renderKycApprovals();
+  renderPendingWorkers();
+  renderWorkersDirectory();
+  renderBookings();
+}
+
+function formatPayoutSummary(w) {
+  if (w.payoutMode === "UPI" && w.upiId) {
+    return `UPI: <strong>${escapeHtml(w.upiId)}</strong>`;
+  }
+  if (w.bankAccountNumber) {
+    const holderPart = w.bankHolderName ? ` (${escapeHtml(w.bankHolderName)})` : "";
+    return `Bank A/c: <strong>${escapeHtml(w.bankAccountNumber)}</strong> | IFSC: <strong>${escapeHtml(w.bankIfsc || "N/A")}</strong>${holderPart}`;
+  }
+  return "Payout info pending";
+}
+
+function renderKycApprovals() {
+  const el = document.getElementById("kycApprovalsList");
+  if (!el) return;
+  const candidates = Object.values(workerProfiles).filter(w =>
+    w && w.name && (w.kycStatus === "Submitted" || (w.aadhaarPhotoUrl && w.panPhotoUrl && w.selfiePhotoUrl && w.kycStatus !== "Approved"))
+  );
+
+  if (!candidates.length) {
+    el.innerHTML = `<p style="font-size:12px; color:#64748b;">Koi nayi KYC approval request nahi hai.</p>`;
+    return;
+  }
+
+  el.innerHTML = candidates.map(w => {
+    const phoneKey = normalizePhone10(w.phone) || w.phone;
+    const safePhone = escapeHtml(phoneKey);
+    return `
+      <div class="order-item">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <strong>${escapeHtml(w.name)} (${escapeHtml(w.subRole || "Mistri / Tech")})</strong>
+          <span class="badge badge-pending">${escapeHtml(w.kycStatus || "Submitted")}</span>
+        </div>
+        <div>📞 <a href="tel:${safePhone}">${safePhone}</a> • ${escapeHtml(w.branch || "N/A")}</div>
+        <div>Aadhaar No.: <strong>[Aadhaar Redacted]</strong> | PAN No.: <strong>${escapeHtml(w.panNumber || "N/A")}</strong></div>
+        <div>${formatPayoutSummary(w)}</div>
+        <div class="proof-grid">
+          ${w.aadhaarPhotoUrl ? `<div class="proof-card"><strong>Aadhaar</strong><a href="${escapeHtml(w.aadhaarPhotoUrl)}" target="_blank" rel="noopener"><img src="${escapeHtml(w.aadhaarPhotoUrl)}" alt="Aadhaar"/></a></div>` : `<div class="proof-card"><strong>Aadhaar</strong><div>Missing</div></div>`}
+          ${w.panPhotoUrl ? `<div class="proof-card"><strong>PAN</strong><a href="${escapeHtml(w.panPhotoUrl)}" target="_blank" rel="noopener"><img src="${escapeHtml(w.panPhotoUrl)}" alt="PAN"/></a></div>` : `<div class="proof-card"><strong>PAN</strong><div>Missing</div></div>`}
+          ${w.selfiePhotoUrl ? `<div class="proof-card"><strong>Selfie</strong><a href="${escapeHtml(w.selfiePhotoUrl)}" target="_blank" rel="noopener"><img src="${escapeHtml(w.selfiePhotoUrl)}" alt="Selfie"/></a></div>` : `<div class="proof-card"><strong>Selfie</strong><div>Missing</div></div>`}
+        </div>
+        <button class="btn btn-success btn-sm" onclick="approveWorkerKyc('${safePhone}')">✅ KYC Approve Karein</button>
+        <button class="btn btn-danger btn-sm" onclick="rejectWorkerKyc('${safePhone}')">❌ KYC Reject Karein</button>
+      </div>
+    `;
+  }).join("");
+}
+
+window.approveWorkerKyc = async function(phone) {
+  const cleanPhone = normalizePhone10(phone) || phone;
+  const w = workerProfiles[cleanPhone] || pendingWorkers[cleanPhone] || { phone: cleanPhone, name: `Mistri (${cleanPhone})` };
+  const approvedPayload = {
+    ...w,
+    phone: cleanPhone,
+    kycStatus: "Approved",
+    approvedAt: Date.now()
+  };
+  await setDoc(doc(db, "approvedWorkers", cleanPhone), approvedPayload, { merge: true });
+  await setDoc(doc(db, "workerProfiles", cleanPhone), approvedPayload, { merge: true });
+  if (pendingWorkers[cleanPhone]) {
+    await deleteDoc(doc(db, "pendingWorkers", cleanPhone));
+  }
+  alert(`✅ ${w.name} ki KYC approve ho gayi hai!`);
+};
+
+window.rejectWorkerKyc = async function(phone) {
+  const cleanPhone = normalizePhone10(phone) || phone;
+  if (!confirm(`Kya aap ${cleanPhone} ki KYC reject karna chahte hain?`)) return;
+  await setDoc(doc(db, "workerProfiles", cleanPhone), {
+    kycStatus: "Rejected",
+    kycRejectedAt: Date.now()
+  }, { merge: true });
+  alert("❌ KYC reject kar di gayi hai.");
+};
+
+function renderPendingWorkers() {
+  const el = document.getElementById("pendingWorkersList");
+  const keys = Object.keys(pendingWorkers).filter(k => pendingWorkers[k]?.name);
+  el.innerHTML = keys.length ? keys.map(p => {
+    const w = pendingWorkers[p];
+    const safePhone = escapeHtml(w.phone || p);
+    return `
+      <div class="order-item">
+        <strong>${escapeHtml(w.name)} (${escapeHtml(w.subRole || "Mistri / Tech")})</strong> - 📞 ${safePhone}<br/>
+        <span style="font-size:11.5px;">Branch: ${escapeHtml(w.branch || "N/A")} | Skill: ${escapeHtml(w.workDetails || "N/A")}</span><br/>
+        <button class="btn btn-success btn-sm" onclick="approveWorker('${safePhone}')">✅ Approve</button>
+        <button class="btn btn-danger btn-sm" onclick="rejectWorker('${safePhone}')">🗑️ Reject</button>
+      </div>
+    `;
+  }).join("") : `<p style="font-size:12px; color:#64748b;">Koi pending technician request nahi hai.</p>`;
+}
+
+window.approveWorker = async function(phone) {
+  const w = pendingWorkers[phone];
+  if (!w) return;
+  const cleanPhone = normalizePhone10(w.phone || phone) || phone;
+  await setDoc(doc(db, "approvedWorkers", cleanPhone), { ...w, phone: cleanPhone, kycStatus: "Approved", approvedAt: Date.now() });
+  await setDoc(doc(db, "workerProfiles", cleanPhone), { ...w, phone: cleanPhone, kycStatus: "Approved", updatedAt: Date.now() }, { merge: true });
+  await deleteDoc(doc(db, "pendingWorkers", phone));
+  alert(`✅ ${w.name} approve ho gaye hain!`);
+};
+
+window.rejectWorker = async function(phone) {
+  const w = pendingWorkers[phone];
+  if (!confirm(`Kya aap ${w?.name || phone} ki request reject karna chahte hain?`)) return;
+  await deleteDoc(doc(db, "pendingWorkers", phone));
+  alert("🗑️ Request remove kar di gayi.");
+};
+
+function renderWorkersDirectory() {
+  const el = document.getElementById("workersDirectoryList");
+  const list = getMergedApprovedWorkersList();
+  const completedMap = getCompletedJobsByWorker();
+  el.innerHTML = list.length ? list.map(w => {
+    const phoneKey = normalizePhone10(w.phone) || w.phone;
+    const online = isWorkerCurrentlyOnline(phoneKey);
+    const loc = workerLocations[phoneKey] || workerLocations[w.phone];
+    const hasCoords = loc && typeof loc.lat === "number" && typeof loc.lng === "number";
+    const gps = hasCoords
+      ? `<a href="https://maps.google.com/?q=${encodeURIComponent(loc.lat)},${encodeURIComponent(loc.lng)}" target="_blank" rel="noopener">📍 Live GPS</a>`
+      : "No GPS";
+    const onlineTag = online
+      ? `<span class="badge badge-paid">🟢 Online</span>`
+      : `<span class="badge">⚫ Offline</span>`;
+    const phoneDisplay = escapeHtml(phoneKey);
+    return `
+      <div class="order-item ${online ? "online-worker" : ""}">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:6px;">
+          <strong>👷 ${escapeHtml(w.name)}</strong>
+          <div>
+            ${onlineTag}
+            <span class="badge badge-jobs">Jobs: ${completedMap[phoneKey] || 0}</span>
+          </div>
+        </div>
+        <div>(${escapeHtml(w.subRole || "Mistri / Tech")}) — ${escapeHtml(w.branch || "N/A")}</div>
+        📞 <a href="tel:${phoneDisplay}">${phoneDisplay}</a> | ${gps}<br/>
+        <span style="font-size:11.5px; color:#475569;">${formatPayoutSummary(w)}</span><br/>
+        ${online ? `<button type="button" class="btn btn-success btn-sm" onclick="openDirectOrderModal('${phoneDisplay}')">📦 Direct Book / Order Dein</button>` : ""}
+      </div>
+    `;
+  }).join("") : `<p style="font-size:12px; color:#64748b;">Abhi koi KYC-approved technician/mistri nahi hai.</p>`;
+}
+
+window.renderBookings = function() {
+  const branchFilter = document.getElementById("dashBranchFilter").value;
+  const statusFilter = document.getElementById("dashStatusFilter").value;
+  const searchTerm = (document.getElementById("bookingSearchInput").value || "").trim().toLowerCase();
+  const listEl = document.getElementById("ordersList");
+
+  const filtered = bookings.filter(b => {
+    const matchBranch = branchFilter === "All" || b.branch === branchFilter;
+    const matchStatus = statusFilter === "All" || (b.status || "Pending") === statusFilter;
+    const matchSearch = !searchTerm || [
+      b.id, b.service, b.customerName, b.customerPhone, b.address, b.assignedWorkerName
+    ].some(val => String(val || "").toLowerCase().includes(searchTerm));
+    return matchBranch && matchStatus && matchSearch;
+  });
+
+  if (!filtered.length) {
+    listEl.innerHTML = `<p style="font-size:12.5px; color:#64748b;">Is filter ke hisaab se koi booking nahi hai.</p>`;
+    return;
+  }
+
+  listEl.innerHTML = filtered.map(b => {
+    const docKey = escapeHtml(b.docId || b.id);
+    const bookingId = escapeHtml(b.id || b.docId);
+    const amount = getBookingAmount(b);
+    const payBadge = b.upiVerified
+      ? `<span class="badge badge-paid">UPI Verified</span>`
+      : `<span class="badge badge-pending">${escapeHtml(b.paymentMode || "Pending")}</span>`;
+    const mapBtn = (b.lat != null && b.lng != null)
+      ? `<a href="https://maps.google.com/?q=${encodeURIComponent(b.lat)},${encodeURIComponent(b.lng)}" target="_blank" rel="noopener" class="btn btn-loc btn-sm">📍 Customer Map</a>`
+      : "";
+    const photos = (b.afterPhoto || b.partPhoto || b.customerSignature)
+      ? `<div class="proof-grid">
+          ${b.afterPhoto ? `<div class="proof-card"><strong>Kaam Photo</strong><a href="${escapeHtml(b.afterPhoto)}" target="_blank" rel="noopener"><img src="${escapeHtml(b.afterPhoto)}" alt="Kaam photo"/></a></div>` : `<div class="proof-card"><strong>Kaam Photo</strong><div>—</div></div>`}
+          ${b.partPhoto ? `<div class="proof-card"><strong>Samaan Photo</strong><a href="${escapeHtml(b.partPhoto)}" target="_blank" rel="noopener"><img src="${escapeHtml(b.partPhoto)}" alt="Samaan photo"/></a></div>` : `<div class="proof-card"><strong>Samaan Photo</strong><div>—</div></div>`}
+          ${b.customerSignature ? `<div class="proof-card"><strong>Cust. Sign</strong><a href="${escapeHtml(b.customerSignature)}" target="_blank" rel="noopener"><img src="${escapeHtml(b.customerSignature)}" alt="Customer signature"/></a></div>` : `<div class="proof-card"><strong>Cust. Sign</strong><div>—</div></div>`}
+        </div>`
+      : "";
+
+    return `
+      <div class="order-item">
+        <div style="display:flex; justify-content:space-between; gap:6px;">
+          <strong>#${bookingId} - ${escapeHtml(b.service || "Service")}</strong>
+          <span class="badge">${escapeHtml(b.status || "Pending")}</span>
+        </div>
+        <div><strong>Total Bill:</strong> ₹${amount} | <strong>Branch:</strong> ${escapeHtml(b.branch || "N/A")} (${escapeHtml(b.distKm ?? "-")} KM)</div>
+        ${b.partDetails ? `<div><strong>Naya Samaan:</strong> ${escapeHtml(b.partDetails)} (₹${Number(b.partAmount || 0)})</div>` : ""}
+        <div><strong>Customer:</strong> ${escapeHtml(b.customerName || "N/A")} | 📞 <a href="tel:${escapeHtml(b.customerPhone || "")}">${escapeHtml(b.customerPhone || "N/A")}</a></div>
+        <div><strong>Address:</strong> ${escapeHtml(b.address || "N/A")}</div>
+        <div><strong>Date:</strong> ${escapeHtml(b.date || "N/A")} | ${payBadge} (Txn: ${escapeHtml(b.txnId || "N/A")})</div>
+        ${b.assignedWorkerName ? `<div><strong>Technician:</strong> ${escapeHtml(b.assignedWorkerName)} (${escapeHtml(b.assignedWorkerPhone || "")})</div>` : ""}
+        ${mapBtn}
+        ${photos}
+        <div class="owner-tools">
+          <button class="btn btn-success btn-sm" onclick="verifyUpi('${docKey}')">✔️ Verify UPI</button>
+          <button class="btn btn-warning btn-sm" onclick="openAssignModal('${docKey}')">👷 Assign</button>
+          <button class="btn btn-dark btn-sm" onclick="updateStatus('${docKey}', 'Completed')">✅ Complete</button>
+          <button class="btn btn-sm" onclick="openBillModal('${docKey}')">🧾 Bill</button>
+        </div>
+      </div>
+    `;
+  }).join("");
+};
+
+window.verifyUpi = async function(docId) {
+  await updateDoc(doc(db, "bookings", docId), { upiVerified: true });
+  alert("✅ UPI Payment Verified!");
+};
+
+window.updateStatus = async function(docId, status) {
+  await updateDoc(doc(db, "bookings", docId), { status });
+  alert(`✅ Status updated: ${status}`);
+};
+
+window.openAssignModal = function(docId) {
+  const b = bookings.find(item => (item.docId || item.id) === docId);
+  if (!b) return;
+  activeAssignBookingId = docId;
+  document.getElementById("assignBookingMeta").innerText = `Booking #${b.id || docId} — ${b.service || ""} (${b.branch || ""})`;
+  const selectEl = document.getElementById("assignWorkerSelect");
+  const workers = getMergedApprovedWorkersList();
+  if (!workers.length) {
+    selectEl.innerHTML = `<option value="">Koi KYC-approved technician available nahi hai</option>`;
+  } else {
+    selectEl.innerHTML = workers.map(w => {
+      const phone = normalizePhone10(w.phone) || w.phone;
+      const onlineTag = isWorkerCurrentlyOnline(phone) ? " [ONLINE]" : "";
+      const selected = b.assignedWorkerPhone === phone ? "selected" : "";
+      return `<option value="${escapeHtml(phone)}" ${selected}>${escapeHtml(w.name)}${onlineTag} (${escapeHtml(w.subRole || "Mistri / Tech")}) - ${escapeHtml(w.branch || "")}</option>`;
+    }).join("");
+  }
+  document.getElementById("assignModal").classList.add("open");
+};
+
+window.confirmAssignWorker = async function() {
+  if (!activeAssignBookingId) return;
+  const selectedPhone = document.getElementById("assignWorkerSelect").value;
+  if (!selectedPhone) return alert("⚠️ Kripya technician select karein.");
+  const worker = getMergedApprovedWorkersList().find(w => (normalizePhone10(w.phone) || w.phone) === selectedPhone);
+  if (!worker) return alert("⚠️ Technician profile nahi mila.");
+  await updateDoc(doc(db, "bookings", activeAssignBookingId), {
+    status: "Assigned",
+    assignedWorkerName: worker.name,
+    assignedWorkerPhone: selectedPhone
+  });
+  closeAssignModal();
+  alert(`✅ ${worker.name} ko booking assign kar diya gaya hai!`);
+};
+
+window.closeAssignModal = function() {
+  activeAssignBookingId = null;
+  document.getElementById("assignModal").classList.remove("open");
+};
+
+window.openBillModal = function(docId) {
+  const b = bookings.find(item => (item.docId || item.id) === docId);
+  if (!b) return;
+  const totalAmount = getBookingAmount(b);
+  const vFee = Number(b.visitingFee ?? totalAmount);
+  const pAmt = Number(b.partAmount ?? 0);
+  const sigHtml = b.customerSignature
+    ? `<div style="margin-top:8px; text-align:right;"><div style="font-size:11px; color:#475569;">Customer Signature:</div><img src="${escapeHtml(b.customerSignature)}" alt="Customer Signature" class="sig-preview-img" /></div>`
+    : "";
+
+  document.getElementById("billContent").innerHTML = `
+    <div class="bill-row"><span>Booking ID:</span><strong>${escapeHtml(b.id || docId)}</strong></div>
+    <div class="bill-row"><span>Date:</span><span>${escapeHtml(b.date || "N/A")}</span></div>
+    <div class="bill-row"><span>Branch:</span><span>${escapeHtml(b.branch || "N/A")}</span></div>
+    <div class="bill-row"><span>Customer:</span><span>${escapeHtml(b.customerName || "N/A")} (${escapeHtml(b.customerPhone || "N/A")})</span></div>
+    <div class="bill-row"><span>Service:</span><strong>${escapeHtml(b.service || "N/A")}</strong></div>
+    <div class="bill-row"><span>Technician:</span><span>${escapeHtml(b.assignedWorkerName || "Not Assigned")}</span></div>
+    <div class="bill-row"><span>Visiting Charge:</span><span>₹${vFee}</span></div>
+    <div class="bill-row"><span>Naya Samaan (${escapeHtml(b.partDetails || "None")}):</span><span>₹${pAmt}</span></div>
+    <div class="bill-row"><span>Payment:</span><span>${escapeHtml(b.paymentMode || "N/A")} (${escapeHtml(b.txnId || "N/A")})</span></div>
+    <div class="bill-row" style="border:none; font-size:14px;"><strong>Total Bill:</strong><strong style="color:#16a34a;">₹${totalAmount}</strong></div>
+    ${sigHtml}
+  `;
+  document.getElementById("billModal").classList.add("open");
+};
+
+window.closeBillModal = function() {
+  document.getElementById("billModal").classList.remove("open");
+};
+
+// ---------------- REALTIME LISTENERS ----------------
+function clearListeners() {
+  unsubListeners.forEach(fn => {
+    try { fn(); } catch (_) {}
+  });
+  unsubListeners = [];
+}
+
+function initListeners() {
+  clearListeners();
+
+  unsubListeners.push(
+    onSnapshot(query(collection(db, "bookings"), orderBy("createdAt", "desc")), (snap) => {
+      bookings = snap.docs.map(d => ({ docId: d.id, ...d.data() }));
+      if (currentPortal === "owner" && currentOwner) renderOwnerAll();
+      if (currentPortal === "technician" && activeWorker) renderAssignedJobs();
+      if (currentPortal === "customer") renderCustomerBookings();
+    }, (err) => {
+      console.warn("Bookings listener:", err?.message || err);
+    })
+  );
+
+  unsubListeners.push(
+    onSnapshot(collection(db, "workerLocations"), (snap) => {
+      const map = {}; snap.forEach(d => { map[d.id] = d.data(); }); workerLocations = map;
+      if (currentPortal === "owner" && currentOwner) {
+        renderOnlineWorkersForOwner();
+        renderWorkersDirectory();
+      }
+      if (currentPortal === "technician" && activeWorker) {
+        syncWorkerOnlineDutyBadge();
+      }
+    }, (err) => {
+      console.warn("Locations listener:", err?.message || err);
+    })
+  );
+
+  unsubListeners.push(
+    onSnapshot(collection(db, "pendingWorkers"), (snap) => {
+      const map = {}; snap.forEach(d => { map[d.id] = d.data(); }); pendingWorkers = map;
+      if (currentPortal === "owner" && currentOwner) renderPendingWorkers();
+    }, (err) => {
+      console.warn("Pending workers listener:", err?.message || err);
+    })
+  );
+
+  unsubListeners.push(
+    onSnapshot(collection(db, "approvedWorkers"), (snap) => {
+      const map = {}; snap.forEach(d => { map[d.id] = d.data(); }); approvedWorkers = map;
+      if (currentPortal === "owner" && currentOwner) {
+        renderOnlineWorkersForOwner();
+        renderWorkersDirectory();
+      }
+    }, (err) => {
+      console.warn("Approved workers listener:", err?.message || err);
+    })
+  );
+
+  unsubListeners.push(
+    onSnapshot(collection(db, "workerProfiles"), (snap) => {
+      const map = {}; snap.forEach(d => { map[d.id] = d.data(); }); workerProfiles = map;
+      if (currentPortal === "owner" && currentOwner) {
+        renderOnlineWorkersForOwner();
+        renderKycApprovals();
+        renderWorkersDirectory();
+      }
+      if (currentPortal === "technician" && activeWorker && map[activeWorker.phone]) {
+        activeWorker = { ...activeWorker, ...map[activeWorker.phone] };
+        syncWorkerUI();
+      }
+    }, (err) => {
+      console.warn("Worker profiles listener:", err?.message || err);
+    })
+  );
+
+  unsubListeners.push(
+    onSnapshot(collection(db, "feedbacks"), (snap) => {
+      feedbacks = snap.docs.map(d => d.data());
+    }, (err) => {
+      console.warn("Feedbacks listener:", err?.message || err);
+    })
+  );
+}
+
+onAuthStateChanged(auth, async (user) => {
+  await resolveRoleForAuthUser(user);
+  if (currentPortal === "customer") renderCustomerBookings();
+});
+
+document.getElementById("custDate").valueAsDate = new Date();
+toggleTxnField();
+initListeners();
+switchPortal(currentPortal);
+</script>
+</body>
+</html>
