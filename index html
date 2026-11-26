@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#1e40af" />
+<link id="dynamicManifestLink" rel="manifest" href="data:application/manifest+json;base64,e30=" />
+<link rel="icon" type="image/png" sizes="192x192" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" />
+<title>Apna Technical Services - Customer App</title>
+<style>
+:root {
+  --primary: #1e40af;
+  --secondary: #f59e0b;
+  --bg: #f1f5f9;
+  --card: #ffffff;
+  --text: #1e293b;
+  --success: #16a34a;
+  --danger: #dc2626;
+  --whatsapp: #25d366;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, sans-serif; }
+body { background: #cbd5e1; display: flex; justify-content: center; min-height: 100vh; }
+.app-container {
+  width: 100%;
+  max-width: 480px;
+  background: var(--bg);
+  min-height: 100vh;
+  box-shadow: 0 0 25px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding-bottom: 75px;
+}
+header {
+  background: linear-gradient(135deg, #1e3a8a, #2563eb);
+  color: white;
+  padding: 15px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+.header-top { display: flex; justify-content: space-between; align-items: center; }
+.header-top h1 { font-size: 16.5px; font-weight: 700; }
+.role-badge {
+  background: var(--secondary);
+  color: #000;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: bold;
+}
+.sub-header { font-size: 11px; opacity: 0.92; margin-top: 4px; }
+.section { padding: 14px; display: none; }
+.section.active { display: block; }
+.home-login-card {
+  background: linear-gradient(135deg, #eff6ff, #ffffff);
+  border: 1px solid #bfdbfe;
+  border-left: 4px solid var(--primary);
+  border-radius: 12px;
+  padding: 11px 12px;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+.home-login-title { font-size: 13px; font-weight: 700; color: #1e3a8a; }
+.home-login-sub { font-size: 11px; color: #475569; margin-top: 2px; }
+.branch-banner {
+  background: white;
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-left: 4px solid var(--secondary);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+.branch-banner h4 { font-size: 13px; color: var(--primary); margin-bottom: 6px; }
+.branch-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.branch-chip {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #1e3a8a;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 14px;
+}
+.branch-chip.main {
+  background: #fef3c7;
+  border-color: #f59e0b;
+  color: #92400e;
+}
+.search-box {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+.tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 10px; }
+.tab-btn {
+  background: white;
+  border: 1px solid #cbd5e1;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  white-space: nowrap;
+  cursor: pointer;
+  font-weight: 600;
+}
+.tab-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+.service-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.service-card {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 12px 8px;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.06);
+  cursor: pointer;
+  transition: transform 0.15s;
+  border: 1px solid #e2e8f0;
+}
+.service-card:active { transform: scale(0.96); }
+.service-icon { font-size: 25px; margin-bottom: 5px; }
+.service-name { font-size: 12px; font-weight: 600; color: var(--text); line-height: 1.2; }
+.service-price { font-size: 11px; color: var(--success); font-weight: bold; margin-top: 4px; }
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+.card h3 { font-size: 16px; margin-bottom: 10px; color: var(--primary); }
+label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 4px; color: #475569; }
+input, select, textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  margin-bottom: 11px;
+  font-size: 14px;
+}
+.btn {
+  width: 100%;
+  padding: 11px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  background: var(--primary);
+  color: white;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+}
+.btn:disabled { opacity: 0.65; cursor: not-allowed; }
+.btn-success { background: var(--success); }
+.btn-warning { background: var(--secondary); color: #000; }
+.btn-danger { background: var(--danger); }
+.btn-loc { background: #0284c7; color: #fff; }
+.btn-google {
+  background: #ffffff;
+  color: #1e293b;
+  border: 1px solid #cbd5e1;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.btn-sm { padding: 6px 10px; font-size: 12px; width: auto; margin-right: 5px; margin-top: 6px; }
+.auth-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #64748b;
+  font-size: 12px;
+  margin: 12px 0 4px;
+}
+.auth-divider::before, .auth-divider::after { content: ""; flex: 1; border-bottom: 1px solid #cbd5e1; }
+.auth-divider span { padding: 0 10px; }
+.loc-box {
+  background: #f0f9ff;
+  border: 1px solid #38bdf8;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  font-size: 12px;
+}
+.live-track-box {
+  background: #ecfdf5;
+  border: 1px solid #10b981;
+  border-radius: 8px;
+  padding: 8px 10px;
+  margin-top: 8px;
+  font-size: 12px;
+  color: #065f46;
+}
+.range-badge {
+  display: inline-block;
+  margin-top: 5px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-weight: bold;
+}
+.range-ok { background: #dcfce7; color: #166534; }
+.range-far { background: #fee2e2; color: #991b1b; }
+.upi-box {
+  background: #eff6ff;
+  border: 1px dashed #2563eb;
+  padding: 12px;
+  border-radius: 8px;
+  text-align: center;
+  margin-bottom: 12px;
+}
+.upi-id-text {
+  background: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-weight: bold;
+  color: #1e3a8a;
+  display: inline-block;
+  margin: 6px 0;
+  border: 1px solid #bfdbfe;
+  font-size: 13px;
+}
+.order-item {
+  border-left: 4px solid var(--primary);
+  background: #f8fafc;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: bold;
+  background: #e2e8f0;
+}
+.modal-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.65);
+  z-index: 200;
+  justify-content: center;
+  align-items: center;
+  padding: 14px;
+}
+.modal-backdrop.open { display: flex; }
+.bill-sheet {
+  background: white;
+  width: 100%;
+  max-width: 440px;
+  border-radius: 12px;
+  padding: 16px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.bill-header { border-bottom: 2px solid #1e3a8a; padding-bottom: 8px; margin-bottom: 10px; text-align: center; }
+.bill-row { display: flex; justify-content: space-between; font-size: 12.5px; padding: 5px 0; border-bottom: 1px dashed #e2e8f0; gap: 10px; }
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  max-width: 480px;
+  background: white;
+  display: flex;
+  border-top: 1px solid #cbd5e1;
+  z-index: 100;
+}
+.nav-item {
+  flex: 1;
+  text-align: center;
+  padding: 10px 4px;
+  font-size: 11px;
+  color: #64748b;
+  cursor: pointer;
+  font-weight: 600;
+}
+.nav-item.active { color: var(--primary); background: #eff6ff; }
+.nav-icon { font-size: 18px; display: block; margin-bottom: 2px; }
+.otp-row { display: flex; gap: 8px; align-items: center; margin-bottom: 10px; }
+.otp-row input { margin-bottom: 0; }
+@media print {
+  body { background: white; }
+  .app-container, .bottom-nav, header, .section { display: none !important; }
+  .modal-backdrop { position: static; background: none; display: block !important; padding: 0; }
+  .bill-sheet { box-shadow: none; max-width: 100%; max-height: none; }
+  .no-print { display: none !important; }
+}
+</style>
+</head>
+<body>
+<div class="app-container">
+<header>
+  <div class="header-top">
+    <h1>🛠️ Apna Technical Services</h1>
+    <span class="role-badge" id="currentRoleBadge">Customer</span>
+  </div>
+  <div class="sub-header">Helpline: 📞 9693654168 | Visiting: ₹400 | 20–25 KM Range</div>
+</header>
+
+<!-- 1. SERVICES HOME -->
+<div id="sec-home" class="section active">
+  <div class="home-login-card">
+    <div>
+      <div class="home-login-title" id="homeLoginTitle">🔐 Customer Login</div>
+      <div class="home-login-sub" id="homeLoginSub">Mobile OTP ya Gmail se login karein</div>
+    </div>
+    <button type="button" class="btn btn-sm" id="homeLoginBtn" style="margin-top:0; white-space:nowrap;" onclick="switchTab('account')">Account</button>
+  </div>
+
+  <div class="branch-banner">
+    <h4>🏢 Hamare 4 Branches (Har Branch se 20–25 KM Tak Home Service):</h4>
+    <div class="branch-chips">
+      <span class="branch-chip main">⭐ 1. Khagaria (Main Branch)</span>
+      <span class="branch-chip">📍 2. Maheshkhunt</span>
+      <span class="branch-chip">📍 3. Beldaur</span>
+      <span class="branch-chip">📍 4. Alamnagar - Khurhan</span>
+    </div>
+  </div>
+
+  <input type="text" id="searchInput" class="search-box" placeholder="🔍 Service khojein (AC, Raj Mistri, Bijli...)" onkeyup="renderServices()" />
+
+  <div class="tabs">
+    <button type="button" class="tab-btn active" onclick="filterCategory('All', this)">All</button>
+    <button type="button" class="tab-btn" onclick="filterCategory('Appliances', this)">Appliances & TV</button>
+    <button type="button" class="tab-btn" onclick="filterCategory('Electrical', this)">Bijli & Motor</button>
+    <button type="button" class="tab-btn" onclick="filterCategory('Mistri', this)">Mistri & Labour</button>
+  </div>
+
+  <div class="service-grid" id="serviceGrid"></div>
+</div>
+
+<!-- 2. BOOKING & PAYMENT -->
+<div id="sec-book" class="section">
+  <div class="card">
+    <h3>📅 Online Service Booking (20–25 KM Radius)</h3>
+    <form id="bookingForm" onsubmit="submitBooking(event)">
+      <label>Nearest Branch Chunein (25 KM Range)</label>
+      <select id="bookBranch" required onchange="recheckBranchDistance()">
+        <option value="Khagaria Main Branch">1. Khagaria (Main Branch) - 25 KM Radius</option>
+        <option value="Maheshkhunt Branch">2. Maheshkhunt Branch - 25 KM Radius</option>
+        <option value="Beldaur Branch">3. Beldaur Branch - 25 KM Radius</option>
+        <option value="Alamnagar - Khurhan Branch">4. Alamnagar - Khurhan Branch - 25 KM Radius</option>
+      </select>
+
+      <label>Service Chunein</label>
+      <select id="bookService" required></select>
+
+      <label>Customer ka Naam</label>
+      <input type="text" id="bookName" placeholder="Apna poora naam likhein" required />
+
+      <label>Mobile / WhatsApp Number</label>
+      <input type="tel" id="bookPhone" placeholder="10 digit mobile number" maxlength="10" required />
+
+      <label>Poora Pata (Gaon / Mohalla / Panchayat / Landmark)</label>
+      <textarea id="bookAddress" rows="2" placeholder="Ghar no., Gaon/Mohalla, Thana, District" required></textarea>
+
+      <div class="loc-box">
+        <strong>📍 Customer Live Location & 25 KM Distance Check:</strong>
+        <div id="custLocText" style="margin:5px 0; color:#0f172a;">Live location lekar apni branch se doori (KM) check karein.</div>
+        <div id="distanceStatusBox"></div>
+        <button type="button" class="btn btn-loc btn-sm" onclick="captureCustomerLocation()">📡 Meri Live Location & KM Check Karein</button>
+        <input type="hidden" id="custLat" />
+        <input type="hidden" id="custLng" />
+        <input type="hidden" id="custDistKm" />
+      </div>
+
+      <label>Kaam ki Date</label>
+      <input type="date" id="bookDate" required />
+
+      <label>Payment Mode</label>
+      <select id="paymentMode" onchange="toggleUpiBox()">
+        <option value="Online UPI">Online Payment (UPI: manishkumarkgg181@ybl)</option>
+        <option value="Cash After Service">Cash After Service</option>
+      </select>
+
+      <div id="upiBox" class="upi-box">
+        <strong>Service Visiting Charge: ₹400</strong><br/>
+        <span class="upi-id-text">manishkumarkgg181@ybl</span><br/>
+        <button type="button" class="btn btn-warning btn-sm" onclick="copyUpiId()">📋 UPI ID Copy Karein</button>
+        <a href="upi://pay?pa=manishkumarkgg181@ybl&pn=Apna%20Technical%20Service&am=400&cu=INR" class="btn btn-success btn-sm">💳 Pay ₹400 via UPI App</a>
+        <input type="text" id="upiTxnId" placeholder="Payment ke baad UTR / Transaction ID daalein" style="margin-top:8px;" />
+      </div>
+
+      <button type="submit" class="btn btn-success">✅ Confirm Booking & Alert 9693654168</button>
+    </form>
+  </div>
+</div>
+
+<!-- 3. MY BOOKING & LIVE TRACKING -->
+<div id="sec-mybookings" class="section">
+  <div class="card">
+    <h3>📦 My Booking & Live Technician Tracking</h3>
+    <div style="display:flex; gap:8px; margin-bottom:10px;">
+      <input type="tel" id="trackPhoneInput" placeholder="Apna 10-digit mobile number daalein" maxlength="10" style="margin-bottom:0;" />
+      <button type="button" class="btn btn-sm" style="margin-top:0; white-space:nowrap;" onclick="loadMyBookings()">🔍 Dekhein</button>
+    </div>
+    <div id="myBookingsList"></div>
+  </div>
+
+  <div style="text-align:center; margin-top:10px; margin-bottom:16px;">
+    <button type="button" class="btn btn-sm" style="background:#334155;" onclick="openOwnerUpdateModal()">🔐 Owner / Technician Update</button>
+  </div>
+</div>
+
+<!-- 4. CUSTOMER ACCOUNT LOGIN -->
+<div id="sec-account" class="section">
+  <div class="card" id="loginFormCard">
+    <h3>🔐 Customer Login (Mobile OTP / Gmail)</h3>
+    <form onsubmit="handleCustomerLogin(event)">
+      <label>Aapka Naam</label>
+      <input type="text" id="loginName" placeholder="Apna naam likhein" required />
+
+      <label>Mobile Number (10 Digit)</label>
+      <div class="otp-row">
+        <input type="tel" id="loginPhone" placeholder="Jaise: 9876543210" maxlength="10" required />
+        <button type="button" class="btn btn-loc btn-sm" style="margin-top:0; white-space:nowrap;" onclick="sendMobileOtp()">📲 OTP Bhejein</button>
+      </div>
+
+      <div id="recaptcha-container" style="margin-bottom:8px;"></div>
+
+      <label>Mobile OTP Daalein</label>
+      <div class="otp-row">
+        <input type="text" id="otpCodeInput" placeholder="6-digit OTP daalein" maxlength="6" />
+        <button type="button" class="btn btn-success btn-sm" style="margin-top:0; white-space:nowrap;" onclick="verifyMobileOtp()">✔️ Verify OTP</button>
+      </div>
+
+      <div id="otpStatusText" style="font-size:12px; color:#475569; margin-bottom:10px;">OTP verify karein ya neeche Gmail se login karein.</div>
+
+      <button type="submit" class="btn">Mobile OTP se Login Karein</button>
+      <div class="auth-divider"><span>YA</span></div>
+      <button type="button" class="btn btn-google" onclick="handleGmailLogin()">
+        <span>📧</span>
+        <span>Continue with Gmail</span>
+      </button>
+    </form>
+  </div>
+
+  <div class="card" id="profileCard" style="display:none;">
+    <h3>👤 Mera Customer Profile</h3>
+    <p style="font-size:13px; margin-bottom:6px;"><strong id="profName"></strong></p>
+    <p style="font-size:12px; color:#475569; margin-bottom:12px;" id="profContact"></p>
+    <button type="button" class="btn btn-danger" onclick="logout()">Logout Karein</button>
+  </div>
+</div>
+
+<!-- 5. FEEDBACK SECTION -->
+<div id="sec-feedback" class="section">
+  <div class="card">
+    <h3>⭐ Customer Feedback & Rating</h3>
+    <form onsubmit="submitFeedback(event)">
+      <label>Aapka Naam</label>
+      <input type="text" id="fbName" placeholder="Apna naam likhein" required />
+
+      <label>Branch</label>
+      <select id="fbBranch">
+        <option value="Khagaria Main Branch">Khagaria (Main Branch)</option>
+        <option value="Maheshkhunt Branch">Maheshkhunt Branch</option>
+        <option value="Beldaur Branch">Beldaur Branch</option>
+        <option value="Alamnagar - Khurhan Branch">Alamnagar - Khurhan Branch</option>
+      </select>
+
+      <label>Kaun si Service Li Thi?</label>
+      <select id="fbService"></select>
+
+      <label>Rating</label>
+      <select id="fbRating">
+        <option value="⭐⭐⭐⭐⭐ (5/5)">⭐⭐⭐⭐⭐ Bahut Badhiya (5/5)</option>
+        <option value="⭐⭐⭐⭐ (4/5)">⭐⭐⭐⭐ Achha Kaam (4/5)</option>
+        <option value="⭐⭐⭐ (3/5)">⭐⭐⭐ Theek Hai (3/5)</option>
+        <option value="⭐⭐ (2/5)">⭐⭐ Sudhar ki Zaroorat (2/5)</option>
+      </select>
+
+      <label>Aapka Feedback</label>
+      <textarea id="fbComment" rows="2" placeholder="Apna anubhav likhein..." required></textarea>
+      <button type="submit" class="btn btn-warning">Submit Feedback</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h3>💬 Recent Customer Reviews</h3>
+    <div id="feedbackList"></div>
+  </div>
+</div>
+
+<nav class="bottom-nav">
+  <div class="nav-item active" data-tab="home" onclick="switchTab('home', this)">
+    <span class="nav-icon">🏠</span>Services
+  </div>
+  <div class="nav-item" data-tab="book" onclick="switchTab('book', this)">
+    <span class="nav-icon">📅</span>Book
+  </div>
+  <div class="nav-item" data-tab="mybookings" onclick="switchTab('mybookings', this)">
+    <span class="nav-icon">📦</span>My Booking
+  </div>
+  <div class="nav-item" data-tab="account" onclick="switchTab('account', this)">
+    <span class="nav-icon">👤</span>Account
+  </div>
+  <div class="nav-item" data-tab="feedback" onclick="switchTab('feedback', this)">
+    <span class="nav-icon">⭐</span>Review
+  </div>
+</nav>
+</div>
+
+<!-- DIGITAL BILL MODAL -->
+<div id="billModal" class="modal-backdrop" onclick="closeBillModal()">
+  <div class="bill-sheet" onclick="event.stopPropagation()">
+    <div class="bill-header">
+      <h3 style="color:#1e3a8a; margin-bottom:2px;">🧾 Apna Technical Services</h3>
+      <div style="font-size:11px; color:#475569;">Customer Service Receipt | Helpline: 9693654168</div>
+    </div>
+    <div id="billContent"></div>
+    <div class="no-print" style="margin-top:12px; display:flex; gap:8px;">
+      <button type="button" class="btn btn-success btn-sm" style="flex:1;" onclick="window.print()">🖨️ Print / Save PDF</button>
+      <button type="button" class="btn btn-danger btn-sm" style="flex:1;" onclick="closeBillModal()">❌ Band Karein</button>
+    </div>
+  </div>
+</div>
+
+<!-- OWNER / TECHNICIAN QUICK UPDATE MODAL -->
+<div id="ownerUpdateModal" class="modal-backdrop" onclick="closeOwnerUpdateModal()">
+  <div class="bill-sheet" onclick="event.stopPropagation()">
+    <div class="bill-header">
+      <h3 style="color:#1e3a8a; margin-bottom:2px;">🛠️ Owner / Technician Update</h3>
+      <div style="font-size:11px; color:#475569;" id="staffAccessLabel">Authorized Staff Only</div>
+    </div>
+
+    <div id="ownerPinGate">
+      <label>Owner ya Technician PIN Daalein</label>
+      <input type="password" id="ownerPinInput" placeholder="Apna PIN daalein" />
+      <button type="button" class="btn" onclick="verifyOwnerPin()">🔓 Unlock Update Form</button>
+      <div id="ownerPinMsg" style="font-size:12px; margin-top:8px;"></div>
+    </div>
+
+    <div id="ownerUpdateFields" style="display:none;">
+      <label>Booking ID (Jaise: ATS123456)</label>
+      <input type="text" id="adminBookingId" placeholder="Booking ID daalein" />
+
+      <label>Status Chunein</label>
+      <select id="adminStatus">
+        <option value="Pending">Pending</option>
+        <option value="Assigned">Assigned</option>
+        <option value="On The Way">On The Way</option>
+        <option value="Completed">Completed</option>
+      </select>
+
+      <label>Technician ka Naam</label>
+      <input type="text" id="adminTechName" placeholder="Technician ka naam likhein" />
+
+      <label>Technician Mobile Number</label>
+      <input type="tel" id="adminTechPhone" placeholder="10-digit mobile number" maxlength="10" />
+
+      <div id="ownerOnlyBillBox">
+        <label>Final Bill Amount (₹) — Optional</label>
+        <input type="number" id="adminFinalAmount" placeholder="Jaise: 400 ya 550" />
+      </div>
+
+      <button type="button" class="btn btn-warning" onclick="handleAdminBookingUpdate()">💾 Status & Bill Update Karein</button>
+      <button type="button" class="btn btn-sm" style="background:#64748b; width:100%; margin-top:8px;" onclick="lockStaffSession()">🔒 Lock PIN</button>
+      <div id="adminUpdateMsg" style="font-size:12px; margin-top:8px;"></div>
+    </div>
+
+    <div class="no-print" style="margin-top:12px;">
+      <button type="button" class="btn btn-danger btn-sm" style="width:100%;" onclick="closeOwnerUpdateModal()">❌ Band Karein</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const EMBEDDED_MANIFEST_JSON = {
+  "name": "Apna Technical Services",
+  "short_name": "Apna Tech",
+  "description": "Home appliance repair, electrical work, and mistri/labour services across Khagaria, Maheshkhunt, Beldaur, and Alamnagar - Khurhan.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f1f5f9",
+  "theme_color": "#1e40af",
+  "icons": [
+    {
+      "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+};
+</script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, doc, setDoc, updateDoc, onSnapshot, query, orderBy, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth, RecaptchaVerifier, signInWithPhoneNumber, signInWithRedirect, getRedirectResult, GoogleAuthProvider, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyClVIJ7zSwy2DpVUrcdS49yOwKDszR3G_g",
+  authDomain: "apna-technical-services.firebaseapp.com",
+  projectId: "apna-technical-services",
+  storageBucket: "apna-technical-services.firebasestorage.app",
+  messagingSenderId: "806774256267",
+  appId: "1:806774256267:android:e48a2a735420bae5df5a8e"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+const googleProvider = new GoogleAuthProvider();
+
+const ALERT_WHATSAPP_NUMBER = "919693654168";
+const UPI_ID = "manishkumarkgg181@ybl";
+const VISITING_CHARGE_INR = 400;
+const MAX_SERVICE_RADIUS_KM = 25;
+
+const OWNER_PIN = "ATS@3344";
+const TECHNICIAN_PIN = "ATS@7788";
+
+const branches = [
+  { name: "Khagaria Main Branch", label: "Khagaria (Main Branch)", lat: 25.5020, lng: 86.4730 },
+  { name: "Maheshkhunt Branch", label: "Maheshkhunt Branch", lat: 25.5345, lng: 86.6520 },
+  { name: "Beldaur Branch", label: "Beldaur Branch", lat: 25.5780, lng: 86.7840 },
+  { name: "Alamnagar - Khurhan Branch", label: "Alamnagar - Khurhan Branch", lat: 25.5650, lng: 86.9050 }
+];
+
+const services = [
+  { name: "Fridge & Freezer Repair", cat: "Appliances", workerType: "Technician", icon: "❄️", price: "₹400+" },
+  { name: "AC Repair & Service", cat: "Appliances", workerType: "Technician", icon: "🌬️", price: "₹400+" },
+  { name: "Cooler Repair", cat: "Appliances", workerType: "Technician", icon: "🌀", price: "₹400+" },
+  { name: "LED TV Repair", cat: "Appliances", workerType: "Technician", icon: "📺", price: "₹400+" },
+  { name: "Washing Machine Repair", cat: "Appliances", workerType: "Technician", icon: "🧺", price: "₹400+" },
+  { name: "Inverter & Battery Repair", cat: "Appliances", workerType: "Technician", icon: "🔋", price: "₹400+" },
+  { name: "Printer Repair", cat: "Appliances", workerType: "Technician", icon: "🖨️", price: "₹400+" },
+  { name: "Bijli ka Kaam", cat: "Electrical", workerType: "Technician", icon: "⚡", price: "₹400+" },
+  { name: "Bijli Wiring", cat: "Electrical", workerType: "Technician", icon: "🔌", price: "₹400+" },
+  { name: "Motor & Pump Repair", cat: "Electrical", workerType: "Technician", icon: "⚙️", price: "₹400+" },
+  { name: "Plumber ka Kaam", cat: "Mistri", workerType: "Labour", icon: "🚰", price: "₹400+" },
+  { name: "Raj Mistri", cat: "Mistri", workerType: "Labour", icon: "🧱", price: "₹600/day" },
+  { name: "Tiles Mistri", cat: "Mistri", workerType: "Labour", icon: "🔲", price: "₹650/day" },
+  { name: "Paint aur Putti", cat: "Mistri", workerType: "Labour", icon: "🎨", price: "₹550/day" },
+  { name: "Labour (Mazdoor)", cat: "Mistri", workerType: "Labour", icon: "👷", price: "₹450/day" }
+];
+
+let selectedCategory = "All";
+let confirmationResultObj = null;
+let isOtpVerified = false;
+let staffRole = null;
+let currentBookingsCache = [];
+let bookingsUnsubscribe = null;
+
+function setTodayDateLocal(inputEl) {
+  if (!inputEl) return;
+  const now = new Date();
+  const offset = now.getTimezoneOffset();
+  const localDate = new Date(now.getTime() - offset * 60000);
+  inputEl.value = localDate.toISOString().split("T")[0];
+}
+
+function attachBlobManifest() {
+  try {
+    const blob = new Blob([JSON.stringify(EMBEDDED_MANIFEST_JSON)], { type: "application/manifest+json" });
+    const url = URL.createObjectURL(blob);
+    const linkEl = document.getElementById("dynamicManifestLink");
+    if (linkEl) linkEl.href = url;
+  } catch (e) {}
+}
+
+window.switchTab = function(tabName, el) {
+  document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+  document.getElementById('sec-' + tabName).classList.add('active');
+
+  document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+  if (el) {
+    el.classList.add('active');
+  } else {
+    const navMatch = document.querySelector(`.nav-item[data-tab="${tabName}"]`);
+    if (navMatch) navMatch.classList.add('active');
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+window.filterCategory = function(cat, btn) {
+  selectedCategory = cat;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderServices();
+};
+
+window.renderServices = function() {
+  const queryText = document.getElementById('searchInput').value.toLowerCase().trim();
+  const grid = document.getElementById('serviceGrid');
+  grid.innerHTML = "";
+
+  const filtered = services.filter(s => {
+    const matchCat = selectedCategory === "All" || s.cat === selectedCategory;
+    const matchSearch = s.name.toLowerCase().includes(queryText);
+    return matchCat && matchSearch;
+  });
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:20px; color:#64748b; font-size:13px;">Koi service nahi mili. Doosra naam search karein.</div>`;
+    return;
+  }
+
+  filtered.forEach(s => {
+    const card = document.createElement('div');
+    card.className = 'service-card';
+    card.innerHTML = `
+      <div class="service-icon">${s.icon}</div>
+      <div class="service-name">${s.name}</div>
+      <div class="service-price">${s.price}</div>
+    `;
+    card.onclick = () => selectServiceAndBook(s.name);
+    grid.appendChild(card);
+  });
+};
+
+function populateServiceDropdowns() {
+  const bookSel = document.getElementById('bookService');
+  const fbSel = document.getElementById('fbService');
+  bookSel.innerHTML = "";
+  fbSel.innerHTML = "";
+
+  services.forEach(s => {
+    bookSel.add(new Option(`${s.icon} ${s.name} (${s.price})`, s.name));
+    fbSel.add(new Option(`${s.icon} ${s.name}`, s.name));
+  });
+}
+
+window.selectServiceAndBook = function(serviceName) {
+  document.getElementById('bookService').value = serviceName;
+  switchTab('book');
+};
+
+function getDistanceKm(lat1, lon1, lat2, lon2) {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return +(R * c).toFixed(1);
+}
+
+window.captureCustomerLocation = function() {
+  const locText = document.getElementById('custLocText');
+  const distBox = document.getElementById('distanceStatusBox');
+
+  if (!navigator.geolocation) {
+    document.getElementById('custDistKm').value = "Manual Address";
+    locText.innerHTML = `<span style="color:#b45309;">⚠️ Is device par GPS nahi hai. Kripya neeche poora pata (Gaon/Mohalla/Landmark) sahi se likhein.</span>`;
+    distBox.innerHTML = `<span class="range-badge range-ok">📍 Manual Location Mode Active (Booking Allowed)</span>`;
+    return;
+  }
+
+  locText.innerText = "📡 GPS location fetch ho rahi hai, kripya pratiksha karein...";
+
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      const lat = pos.coords.latitude;
+      const lng = pos.coords.longitude;
+      document.getElementById('custLat').value = lat;
+      document.getElementById('custLng').value = lng;
+      locText.innerHTML = `✅ Location Captured: <strong>${lat.toFixed(4)}, ${lng.toFixed(4)}</strong>`;
+      recheckBranchDistance();
+    },
+    (err) => {
+      document.getElementById('custLat').value = "";
+      document.getElementById('custLng').value = "";
+      document.getElementById('custDistKm').value = "Manual Address";
+
+      const msg = err.code === 1
+        ? "Location permission band hai."
+        : "GPS signal weak ya timeout ho gaya.";
+
+      locText.innerHTML = `<span style="color:#b45309;">⚠️ ${msg} Koi baat nahi—poora pata likh kar booking karein.</span>`;
+      distBox.innerHTML = `<span class="range-badge range-ok">📍 Fallback Active: Address se service check hogi</span>`;
+    },
+    { enableHighAccuracy: false, timeout: 7000, maximumAge: 60000 }
+  );
+};
+
+window.recheckBranchDistance = function() {
+  const lat = parseFloat(document.getElementById('custLat').value);
+  const lng = parseFloat(document.getElementById('custLng').value);
+  const statusBox = document.getElementById('distanceStatusBox');
+  if (isNaN(lat) || isNaN(lng)) return;
+
+  const selectedBranchName = document.getElementById('bookBranch').value;
+  const branchObj = branches.find(b => b.name === selectedBranchName) || branches[0];
+  const dist = getDistanceKm(lat, lng, branchObj.lat, branchObj.lng);
+  document.getElementById('custDistKm').value = dist;
+
+  if (dist <= MAX_SERVICE_RADIUS_KM) {
+    statusBox.innerHTML = `<span class="range-badge range-ok">✅ ${branchObj.label} se doori: ${dist} KM (Service Available)</span>`;
+  } else {
+    statusBox.innerHTML = `<span class="range-badge range-far">⚠️ ${branchObj.label} se doori: ${dist} KM (25 KM range se bahar - extra charge lag sakta hai)</span>`;
+  }
+};
+
+window.toggleUpiBox = function() {
+  const mode = document.getElementById('paymentMode').value;
+  document.getElementById('upiBox').style.display = mode === "Online UPI" ? "block" : "none";
+};
+
+window.copyUpiId = function() {
+  navigator.clipboard.writeText(UPI_ID);
+  alert("UPI ID Copy ho gayi: " + UPI_ID);
+};
+
+window.submitBooking = async function(e) {
+  e.preventDefault();
+  const form = document.getElementById('bookingForm');
+  const submitBtn = form.querySelector('button[type="submit"]');
+
+  const branch = document.getElementById('bookBranch').value;
+  const service = document.getElementById('bookService').value;
+  const name = document.getElementById('bookName').value.trim();
+  const phone = document.getElementById('bookPhone').value.replace(/\D/g, '').slice(-10);
+  const address = document.getElementById('bookAddress').value.trim();
+  const date = document.getElementById('bookDate').value;
+  const paymentMode = document.getElementById('paymentMode').value;
+  const txnId = document.getElementById('upiTxnId').value.trim() || "N/A";
+  const lat = document.getElementById('custLat').value || "";
+  const lng = document.getElementById('custLng').value || "";
+  const distKm = document.getElementById('custDistKm').value || "Manual Address";
+
+  if (phone.length !== 10) {
+    alert("Kripya sahi 10-digit mobile number daalein.");
+    return;
+  }
+
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.innerText = "⏳ Booking Save Ho Rahi Hai...";
+  }
+
+  const bookingId = "ATS" + Date.now().toString().slice(-6);
+  const bookingData = {
+    bookingId,
+    branch,
+    service,
+    customerName: name,
+    phone,
+    address,
+    date,
+    paymentMode,
+    txnId,
+    visitingCharge: VISITING_CHARGE_INR,
+    lat,
+    lng,
+    distanceKm: distKm,
+    locationMode: (lat && lng) ? "GPS" : "Manual Address",
+    status: "Pending",
+    technicianName: "Assigning Soon",
+    technicianPhone: "",
+    createdAt: new Date().toISOString()
+  };
+
+  try {
+    await setDoc(doc(db, "bookings", bookingId), bookingData);
+    localStorage.setItem("ats_last_phone", phone);
+    document.getElementById('trackPhoneInput').value = phone;
+
+    const mapLink = (lat && lng)
+      ? `https://maps.google.com/?q=${lat},${lng}`
+      : `Manual Address (${address})`;
+
+    const distLabel = (typeof distKm === "string" && isNaN(parseFloat(distKm)))
+      ? distKm
+      : `${distKm} KM`;
+
+    const waText = `*New Service Booking - Apna Technical Services*%0A` +
+      `🆔 *Booking ID:* ${bookingId}%0A` +
+      `🏢 *Branch:* ${branch}%0A` +
+      `🛠️ *Service:* ${service}%0A` +
+      `👤 *Name:* ${name}%0A` +
+      `📞 *Phone:* ${phone}%0A` +
+      `📍 *Address:* ${address}%0A` +
+      `📏 *Distance:* ${distLabel}%0A` +
+      `🗺️ *Location:* ${mapLink}%0A` +
+      `📅 *Date:* ${date}%0A` +
+      `💳 *Payment:* ${paymentMode} (Txn: ${txnId})`;
+
+    const waUrl = `https://wa.me/${ALERT_WHATSAPP_NUMBER}?text=${waText}`;
+    const waWin = window.open(waUrl, "_blank");
+    if (!waWin) {
+      console.warn("WhatsApp pop-up blocked; booking is already saved in Firestore.");
+    }
+
+    alert(`✅ Booking Confirm! Aapka Booking ID: ${bookingId}`);
+    form.reset();
+    toggleUpiBox();
+    document.getElementById('custLat').value = "";
+    document.getElementById('custLng').value = "";
+    document.getElementById('custDistKm').value = "";
+    document.getElementById('distanceStatusBox').innerHTML = "";
+    document.getElementById('custLocText').innerText = "Live location lekar apni branch se doori (KM) check karein.";
+    setTodayDateLocal(document.getElementById('bookDate'));
+    switchTab('mybookings');
+    loadMyBookings();
+  } catch (err) {
+    console.error(err);
+    alert("Booking save nahi ho saki: Internet ya Firebase rules check karein (" + err.code + ").");
+  } finally {
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.innerText = "✅ Confirm Booking & Alert 9693654168";
+    }
+  }
+};
+
+window.loadMyBookings = function() {
+  const phoneInput = document.getElementById('trackPhoneInput').value.replace(/\D/g, '').slice(-10);
+  const listDiv = document.getElementById('myBookingsList');
+
+  if (phoneInput.length !== 10) {
+    listDiv.innerHTML = `<p style="color:#dc2626; font-size:12px;">Kripya apna 10-digit mobile number daalein.</p>`;
+    return;
+  }
+
+  localStorage.setItem("ats_last_phone", phoneInput);
+  listDiv.innerHTML = `<p style="font-size:12px; color:#475569;">⏳ Aapki bookings load ho rahi hain...</p>`;
+
+  if (bookingsUnsubscribe) bookingsUnsubscribe();
+
+  const q = query(collection(db, "bookings"), where("phone", "==", phoneInput));
+  bookingsUnsubscribe = onSnapshot(q, (snapshot) => {
+    currentBookingsCache = [];
+    snapshot.forEach(docSnap => currentBookingsCache.push(docSnap.data()));
+    currentBookingsCache.sort((a, b) => (b.createdAt || "").localeCompare(a.createdAt || ""));
+
+    if (currentBookingsCache.length === 0) {
+      listDiv.innerHTML = `<p style="font-size:12.5px; color:#64748b; text-align:center; padding:12px;">Is number (${phoneInput}) par koi booking nahi mili.</p>`;
+      return;
+    }
+
+    listDiv.innerHTML = currentBookingsCache.map((b, idx) => {
+      const statusColor = b.status === "Completed" ? "#dcfce7; color:#166534;" :
+                          b.status === "On The Way" ? "#fef3c7; color:#92400e;" : "#e0f2fe; color:#075985;";
+      return `
+        <div class="order-item">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+            <strong>🆔 ${b.bookingId}</strong>
+            <span class="badge" style="background:${statusColor}">${b.status || "Pending"}</span>
+          </div>
+          <div><strong>🛠️ Service:</strong> ${b.service}</div>
+          <div><strong>🏢 Branch:</strong> ${b.branch}</div>
+          <div><strong>📅 Date:</strong> ${b.date} | <strong>💳:</strong> ${b.paymentMode}</div>
+          <div class="live-track-box">
+            <strong>👷 Technician:</strong> ${b.technicianName || "Assigning Soon"}
+            ${b.technicianPhone ? `(<a href="tel:${b.technicianPhone}">📞 ${b.technicianPhone}</a>)` : ""}
+          </div>
+          <div style="margin-top:6px;">
+            <button type="button" class="btn btn-sm" onclick="openBillModal(${idx})">🧾 Digital Bill Dekhein</button>
+          </div>
+        </div>
+      `;
+    }).join("");
+  }, (err) => {
+    console.error(err);
+    listDiv.innerHTML = `<p style="color:#dc2626; font-size:12px;">Bookings load nahi ho sakin (${err.code}). Firestore rules check karein.</p>`;
+  });
+};
+
+window.openBillModal = function(index) {
+  const b = currentBookingsCache[index];
+  if (!b) return;
+  const totalAmount = b.finalAmount || b.visitingCharge || VISITING_CHARGE_INR;
+
+  document.getElementById('billContent').innerHTML = `
+    <div class="bill-row"><span><strong>Booking ID:</strong></span><span>${b.bookingId}</span></div>
+    <div class="bill-row"><span><strong>Customer:</strong></span><span>${b.customerName}</span></div>
+    <div class="bill-row"><span><strong>Mobile:</strong></span><span>${b.phone}</span></div>
+    <div class="bill-row"><span><strong>Address:</strong></span><span>${b.address}</span></div>
+    <div class="bill-row"><span><strong>Branch:</strong></span><span>${b.branch}</span></div>
+    <div class="bill-row"><span><strong>Service:</strong></span><span>${b.service}</span></div>
+    <div class="bill-row"><span><strong>Service Date:</strong></span><span>${b.date}</span></div>
+    <div class="bill-row"><span><strong>Technician:</strong></span><span>${b.technicianName || "Assigned"}</span></div>
+    <div class="bill-row"><span><strong>Payment Mode:</strong></span><span>${b.paymentMode}</span></div>
+    <div class="bill-row"><span><strong>Transaction ID:</strong></span><span>${b.txnId || "N/A"}</span></div>
+    <div class="bill-row" style="font-size:14px; color:#16a34a; border-bottom:none; padding-top:8px;">
+      <span><strong>Total Amount:</strong></span><span><strong>₹${totalAmount}</strong></span>
+    </div>
+  `;
+  document.getElementById('billModal').classList.add('open');
+};
+
+window.closeBillModal = function() {
+  document.getElementById('billModal').classList.remove('open');
+};
+
+function applyStaffRoleUI() {
+  const badge = document.getElementById('currentRoleBadge');
+  const accessLabel = document.getElementById('staffAccessLabel');
+  const billBox = document.getElementById('ownerOnlyBillBox');
+
+  if (staffRole === "Owner") {
+    badge.innerText = "Owner";
+    accessLabel.innerText = "Logged in as: Owner (Full Access)";
+    billBox.style.display = "block";
+    document.getElementById('ownerPinGate').style.display = "none";
+    document.getElementById('ownerUpdateFields').style.display = "block";
+  } else if (staffRole === "Technician") {
+    badge.innerText = "Technician";
+    accessLabel.innerText = "Logged in as: Technician (Status & Tech Update)";
+    billBox.style.display = "none";
+    document.getElementById('adminFinalAmount').value = "";
+    document.getElementById('ownerPinGate').style.display = "none";
+    document.getElementById('ownerUpdateFields').style.display = "block";
+  } else {
+    badge.innerText = "Customer";
+    accessLabel.innerText = "Authorized Staff Only";
+    billBox.style.display = "block";
+    document.getElementById('ownerPinGate').style.display = "block";
+    document.getElementById('ownerUpdateFields').style.display = "none";
+    document.getElementById('ownerPinInput').value = "";
+  }
+}
+
+window.openOwnerUpdateModal = function() {
+  document.getElementById('ownerUpdateModal').classList.add('open');
+  document.getElementById('ownerPinMsg').innerHTML = "";
+  document.getElementById('adminUpdateMsg').innerHTML = "";
+  applyStaffRoleUI();
+};
+
+window.closeOwnerUpdateModal = function() {
+  document.getElementById('ownerUpdateModal').classList.remove('open');
+};
+
+window.verifyOwnerPin = function() {
+  const enteredPin = document.getElementById('ownerPinInput').value.replace(/\s+/g, '');
+  const msgBox = document.getElementById('ownerPinMsg');
+
+  if (enteredPin === OWNER_PIN) {
+    staffRole = "Owner";
+    applyStaffRoleUI();
+  } else if (enteredPin === TECHNICIAN_PIN) {
+    staffRole = "Technician";
+    applyStaffRoleUI();
+  } else {
+    msgBox.innerHTML = `<span style="color:#dc2626;">❌ Galat PIN. Dobara koshish karein.</span>`;
+  }
+};
+
+window.lockStaffSession = function() {
+  staffRole = null;
+  applyStaffRoleUI();
+};
+
+window.handleAdminBookingUpdate = async function() {
+  if (!staffRole) {
+    alert("Pehle Owner ya Technician PIN se unlock karein.");
+    return;
+  }
+
+  const bookingId = document.getElementById('adminBookingId').value.trim().toUpperCase();
+  const status = document.getElementById('adminStatus').value;
+  const technicianName = document.getElementById('adminTechName').value.trim();
+  const technicianPhone = document.getElementById('adminTechPhone').value.replace(/\D/g, '').slice(-10);
+  const finalAmountRaw = document.getElementById('adminFinalAmount').value.trim();
+  const msgBox = document.getElementById('adminUpdateMsg');
+
+  if (!bookingId) {
+    msgBox.innerHTML = `<span style="color:#dc2626;">⚠️ Kripya Booking ID daalein.</span>`;
+    return;
+  }
+
+  const updates = {
+    status,
+    updatedByRole: staffRole,
+    updatedAt: new Date().toISOString()
+  };
+
+  if (technicianName) updates.technicianName = technicianName;
+  if (technicianPhone.length === 10) updates.technicianPhone = technicianPhone;
+  if (staffRole === "Owner" && finalAmountRaw !== "" && !isNaN(Number(finalAmountRaw))) {
+    updates.finalAmount = Number(finalAmountRaw);
+  }
+
+  try {
+    msgBox.innerHTML = `<span style="color:#475569;">⏳ Update ho raha hai...</span>`;
+    await updateDoc(doc(db, "bookings", bookingId), updates);
+    msgBox.innerHTML = `<span style="color:#16a34a; font-weight:bold;">✅ ${bookingId} (${staffRole}) se update ho gaya (${status}).</span>`;
+  } catch (err) {
+    console.error(err);
+    const reason = err.code === "not-found"
+      ? "Yeh Booking ID database mein nahi mili."
+      : "Update nahi ho saka: Booking ID ya Firestore rules check karein.";
+    msgBox.innerHTML = `<span style="color:#dc2626;">❌ ${reason}</span>`;
+  }
+};
+
+const isFileOrContentProtocol = ["file:", "content:"].includes(window.location.protocol);
+
+function setupRecaptcha() {
+  if (window.recaptchaVerifier) {
+    try { window.recaptchaVerifier.clear(); } catch (e) {}
+    window.recaptchaVerifier = null;
+  }
+  const container = document.getElementById('recaptcha-container');
+  if (container) container.innerHTML = "";
+
+  window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+    size: 'normal'
+  });
+}
+
+window.sendMobileOtp = async function() {
+  const phone = document.getElementById('loginPhone').value.replace(/\D/g, '').slice(-10);
+  const statusText = document.getElementById('otpStatusText');
+  if (phone.length !== 10) {
+    alert("Sahi 10-digit mobile number daalein.");
+    return;
+  }
+  if (isFileOrContentProtocol) {
+    statusText.innerHTML = `<span style="color:#b45309;">⚠️ File/Content URL par Firebase Phone OTP block hota hai. Isse http/https link (jaise GitHub Pages) par kholein ya neeche Gmail / Direct Login use karein.</span>`;
+    return;
+  }
+  try {
+    setupRecaptcha();
+    await window.recaptchaVerifier.render();
+    statusText.innerText = "⏳ OTP bheja ja raha hai...";
+    confirmationResultObj = await signInWithPhoneNumber(auth, "+91" + phone, window.recaptchaVerifier);
+    statusText.innerHTML = `<span style="color:#16a34a; font-weight:bold;">✅ +91${phone} par OTP bhej diya gaya hai!</span>`;
+  } catch (err) {
+    console.error(err);
+    const detail = err.code === "auth/internal-error"
+      ? "Firebase Phone Auth ke liye domain/reCAPTCHA ya billing/test number check karein (file:// ya content:// par OTP kaam nahi karta)."
+      : err.message;
+    statusText.innerHTML = `<span style="color:#dc2626;">❌ OTP error (${err.code || "error"}): ${detail}</span>`;
+  }
+};
+
+window.verifyMobileOtp = async function() {
+  const code = document.getElementById('otpCodeInput').value.trim();
+  const statusText = document.getElementById('otpStatusText');
+  const name = document.getElementById('loginName').value.trim() || "Customer";
+  const phone = document.getElementById('loginPhone').value.replace(/\D/g, '').slice(-10);
+
+  if (!confirmationResultObj || code.length < 6) {
+    alert("Pehle OTP bhejein aur 6-digit code daalein.");
+    return;
+  }
+  try {
+    await confirmationResultObj.confirm(code);
+    isOtpVerified = true;
+    statusText.innerHTML = `<span style="color:#16a34a; font-weight:bold;">✔️ OTP Verify ho gaya! Login ho raha hai...</span>`;
+    if (phone.length === 10) {
+      saveCustomerSession({ name, phone, email: "" });
+    }
+  } catch (err) {
+    statusText.innerHTML = `<span style="color:#dc2626;">❌ Galat OTP. Dobara check karein.</span>`;
+  }
+};
+
+window.handleCustomerLogin = function(e) {
+  e.preventDefault();
+  const name = document.getElementById('loginName').value.trim();
+  const phone = document.getElementById('loginPhone').value.replace(/\D/g, '').slice(-10);
+
+  if (phone.length !== 10) {
+    alert("Kripya sahi 10-digit mobile number daalein.");
+    return;
+  }
+
+  if (isOtpVerified || auth.currentUser || isFileOrContentProtocol) {
+    saveCustomerSession({ name, phone, email: "" });
+    return;
+  }
+
+  alert("Kripya pehle Mobile OTP verify karein ya Gmail se login karein.");
+};
+
+window.handleGmailLogin = async function() {
+  const statusText = document.getElementById('otpStatusText');
+  if (isFileOrContentProtocol) {
+    const typedName = document.getElementById('loginName').value.trim() || "Customer";
+    const typedPhone = document.getElementById('loginPhone').value.replace(/\D/g, '').slice(-10);
+    statusText.innerHTML = `<span style="color:#b45309;">⚠️ Local file/content URL par Google popup block hota hai. Aapka naam/number profile mein save kar diya gaya hai; live Google login ke liye GitHub Pages / http link use karein.</span>`;
+    saveCustomerSession({ name: typedName, phone: typedPhone, email: "" });
+    return;
+  }
+
+  try {
+    const result = await signInWithPopup(auth, googleProvider);
+    const user = result.user;
+    saveCustomerSession({
+      name: user.displayName || document.getElementById('loginName').value.trim() || "Customer",
+      phone: localStorage.getItem("ats_last_phone") || "",
+      email: user.email || ""
+    });
+  } catch (err) {
+    console.error(err);
+    if (err.code === "auth/popup-blocked" || err.code === "auth/cancelled-popup-request") {
+      try {
+        await signInWithRedirect(auth, googleProvider);
+        return;
+      } catch (redirErr) {
+        alert("Gmail Login failed: " + redirErr.message);
+      }
+    } else {
+      alert("Gmail Login failed: " + err.message);
+    }
+  }
+};
+
+getRedirectResult(auth).then((result) => {
+  if (result && result.user) {
+    saveCustomerSession({
+      name: result.user.displayName || "Customer",
+      phone: localStorage.getItem("ats_last_phone") || "",
+      email: result.user.email || ""
+    });
+  }
+}).catch(() => {});
+
+function saveCustomerSession(profile) {
+  localStorage.setItem("ats_customer", JSON.stringify(profile));
+  if (profile.phone) localStorage.setItem("ats_last_phone", profile.phone);
+  applyCustomerProfileUI(profile);
+  switchTab('home');
+}
+
+function applyCustomerProfileUI(profile) {
+  if (!profile) {
+    document.getElementById('loginFormCard').style.display = 'block';
+    document.getElementById('profileCard').style.display = 'none';
+    document.getElementById('homeLoginTitle').innerText = "🔐 Customer Login";
+    document.getElementById('homeLoginSub').innerText = "Mobile OTP ya Gmail se login karein";
+    document.getElementById('homeLoginBtn').innerText = "Account";
+    return;
+  }
+  document.getElementById('loginFormCard').style.display = 'none';
+  document.getElementById('profileCard').style.display = 'block';
+  document.getElementById('profName').innerText = "Naam: " + profile.name;
+  document.getElementById('profContact').innerText = profile.email ? `Email: ${profile.email}` : `Mobile: +91 ${profile.phone}`;
+
+  document.getElementById('homeLoginTitle').innerText = `👋 Namaste, ${profile.name}`;
+  document.getElementById('homeLoginSub').innerText = profile.email || `+91 ${profile.phone}`;
+  document.getElementById('homeLoginBtn').innerText = "Profile";
+
+  if (profile.name) {
+    document.getElementById('bookName').value = profile.name;
+    document.getElementById('fbName').value = profile.name;
+  }
+  if (profile.phone) {
+    document.getElementById('bookPhone').value = profile.phone;
+    document.getElementById('trackPhoneInput').value = profile.phone;
+  }
+}
+
+window.logout = async function() {
+  try { await signOut(auth); } catch (e) {}
+  localStorage.removeItem("ats_customer");
+  isOtpVerified = false;
+  applyCustomerProfileUI(null);
+  alert("Aap logout ho gaye hain.");
+};
+
+window.submitFeedback = async function(e) {
+  e.preventDefault();
+  const fbId = "FB" + Date.now();
+  const fbData = {
+    name: document.getElementById('fbName').value.trim(),
+    branch: document.getElementById('fbBranch').value,
+    service: document.getElementById('fbService').value,
+    rating: document.getElementById('fbRating').value,
+    comment: document.getElementById('fbComment').value.trim(),
+    createdAt: new Date().toISOString()
+  };
+
+  try {
+    await setDoc(doc(db, "feedbacks", fbId), fbData);
+    alert("⭐ Dhanyavaad! Aapka feedback submit ho gaya hai.");
+    document.getElementById('fbComment').value = "";
+  } catch (err) {
+    alert("Feedback submit nahi ho saka: " + err.message);
+  }
+};
+
+function listenToFeedbacks() {
+  const fbList = document.getElementById('feedbackList');
+  const q = query(collection(db, "feedbacks"), orderBy("createdAt", "desc"));
+  onSnapshot(q, (snapshot) => {
+    if (snapshot.empty) {
+      fbList.innerHTML = `<p style="font-size:12px; color:#64748b;">Abhi tak koi review nahi hai. Pehla review dein!</p>`;
+      return;
+    }
+    let html = "";
+    snapshot.forEach(docSnap => {
+      const f = docSnap.data();
+      html += `
+        <div class="order-item" style="border-left-color: var(--secondary);">
+          <div style="display:flex; justify-content:space-between;">
+            <strong>👤 ${f.name}</strong>
+            <span>${f.rating}</span>
+          </div>
+          <div style="font-size:11px; color:#475569; margin:2px 0;">🛠️ ${f.service} | 🏢 ${f.branch}</div>
+          <div style="margin-top:4px;">"${f.comment}"</div>
+        </div>
+      `;
+    });
+    fbList.innerHTML = html;
+  });
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  attachBlobManifest();
+  renderServices();
+  populateServiceDropdowns();
+  setTodayDateLocal(document.getElementById('bookDate'));
+
+  const savedProfile = JSON.parse(localStorage.getItem("ats_customer") || "null");
+  if (savedProfile) applyCustomerProfileUI(savedProfile);
+
+  const lastPhone = localStorage.getItem("ats_last_phone");
+  if (lastPhone) {
+    document.getElementById('trackPhoneInput').value = lastPhone;
+    loadMyBookings();
+  }
+
+  listenToFeedbacks();
+});
+</script>
+</body>
+</html>
