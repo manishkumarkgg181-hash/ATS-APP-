@@ -381,6 +381,7 @@ input, select, textarea { width: 100%; padding: 10px; border: 1px solid #cbd5e1;
           <button type="button" class="btn btn-success btn-sm" style="margin-top:0; white-space:nowrap;" onclick="verifyOtpForRole('customer')">✔️ Login & Services</button>
         </div>
         <div id="custOtpStatus" style="font-size:12px; color:#475569; margin-bottom:10px;">Login ke baad seedha Services screen khul jayegi.</div>
+        <button type="button" class="btn btn-dark" style="margin-bottom:8px;" onclick="signInWithGmailForRole('customer')">📧 Continue with Gmail (Google)</button>
         <button type="button" class="btn btn-warning" onclick="openCustomerSubTab('services')">🏠 Direct Services Grid Dekhein</button>
       </div>
     </div>
@@ -767,6 +768,7 @@ input, select, textarea { width: 100%; padding: 10px; border: 1px solid #cbd5e1;
           <div id="otpStatusText" style="font-size:12px; color:#475569; margin-bottom:10px;">Jo mobile number daalenge, OTP usi number par bheja jayega.</div>
 
           <button type="submit" class="btn">Admin Panel Kholein</button>
+          <button type="button" class="btn btn-dark" style="margin-top:8px;" onclick="signInWithGmailForRole('owner')">📧 Owner Gmail Se Login Karein</button>
         </form>
       </div>
 
@@ -990,7 +992,7 @@ input, select, textarea { width: 100%; padding: 10px; border: 1px solid #cbd5e1;
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc, onSnapshot, query, orderBy, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { getAuth, RecaptchaVerifier, signInWithPhoneNumber, signInAnonymously, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getAuth, RecaptchaVerifier, signInWithPhoneNumber, signInWithPopup, signInWithRedirect, getRedirectResult, GoogleAuthProvider, signInAnonymously, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getStorage, ref, uploadString, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
 const firebaseConfig = {
@@ -1007,6 +1009,8 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 const storage = getStorage(app);
+const googleProvider = new GoogleAuthProvider();
+googleProvider.setCustomParameters({ prompt: "select_account" });
 
 const DEFAULT_VISITING_FEE = 400;
 const MAX_RADIUS_KM = 25;
@@ -1149,11 +1153,16 @@ function resetRecaptchaInstance() {
 }
 
 function getOrCreateRecaptcha(containerId) {
-  if (activeRecaptcha && activeRecaptchaContainerId === containerId) return activeRecaptcha;
   resetRecaptchaInstance();
   const container = document.getElementById(containerId);
-  if (!container) return null;
-  activeRecaptcha = new RecaptchaVerifier(auth, containerId, { size: "normal" });
+  if (!container) throw new Error("reCAPTCHA container nahi mila.");
+  activeRecaptcha = new RecaptchaVerifier(auth, containerId, {
+    size: "normal",
+    callback: () => {},
+    "expired-callback": () => {
+      resetRecaptchaInstance();
+    }
+  });
   activeRecaptchaContainerId = containerId;
   return activeRecaptcha;
 }
@@ -1413,7 +1422,7 @@ window.submitFeedback = async function(e) {
   alert("⭐ Dhanyawad! Aapka feedback save ho gaya hai.");
 };
 
-// ---------------- SHARED OTP FLOW ----------------
+// ---------------- SHARED OTP & GMAIL FLOW ----------------
 function getRoleDomConfig(role) {
   if (role === "customer") {
     return {
@@ -1464,9 +1473,14 @@ window.onOtpPhoneChange = function(role) {
 window.sendOtpForRole = async function(role) {
   const cfg = getRoleDomConfig(role);
   const phone10 = normalizePhone10(document.getElementById(cfg.phoneInputId).value);
-  if (phone10.length !== 10) return alert("⚠️ Kripya sahi 10-digit mobile number daalein.");
-
   const statusEl = document.getElementById(cfg.statusId);
+
+  if (!/^[6-9]\d{9}$/.test(phone10)) {
+    statusEl.style.color = "#dc2626";
+    statusEl.innerText = "⚠️ Kripya sahi 10-digit Indian mobile number daalein.";
+    return alert("⚠️ Kripya sahi 10-digit Indian mobile number daalein.");
+  }
+
   statusEl.style.color = "#475569";
   statusEl.innerText = `⏳ +91${phone10} par OTP bheja ja raha hai...`;
 
@@ -1478,11 +1492,13 @@ window.sendOtpForRole = async function(role) {
     otpState[role].targetPhone = phone10;
     otpState[role].verifiedPhone = null;
     statusEl.style.color = "#16a34a";
-    statusEl.innerText = `📲 ${fullPhone} par OTP bhej diya gaya hai!`;
+    statusEl.innerText = `📲 ${fullPhone} par OTP bhej diya gaya hai! (SMS na aaye toh neeche error dekhein)`;
   } catch (err) {
     resetRecaptchaInstance();
+    const code = err?.code || "unknown";
     statusEl.style.color = "#dc2626";
-    statusEl.innerText = "❌ OTP Error: " + err.message;
+    statusEl.innerText = `❌ OTP Error (${code}): ${err?.message || "OTP send nahi ho saka"}`;
+    alert(`❌ OTP Error (${code}): ${err?.message || "OTP send nahi ho saka"}`);
   }
 };
 
@@ -1496,7 +1512,9 @@ window.verifyOtpForRole = async function(role) {
   if (!state.confirmationResult || state.targetPhone !== phone10) {
     return alert(`⚠️ Pehle +91${phone10 || "mobile number"} par OTP bhejein.`);
   }
-  if (!code) return alert("⚠️ Kripya 6-digit OTP daalein.");
+  if (!/^\d{6}$/.test(code)) {
+    return alert("⚠️ Kripya sahi 6-digit OTP daalein.");
+  }
 
   try {
     await state.confirmationResult.confirm(code);
@@ -1511,9 +1529,116 @@ window.verifyOtpForRole = async function(role) {
     }
     await resolveRoleForAuthUser(auth.currentUser, role);
   } catch (err) {
-    alert("❌ OTP Verification Failed: " + err.message);
+    const codeErr = err?.code || "unknown";
+    statusEl.style.color = "#dc2626";
+    statusEl.innerText = `❌ OTP Verify Error (${codeErr}): ${err?.message || "Invalid OTP"}`;
+    alert(`❌ OTP Verification Failed (${codeErr}): ${err?.message || "Invalid OTP"}`);
   }
 };
+
+async function isOwnerByEmailOrUid(user) {
+  if (!user) return false;
+  try {
+    const byUid = await getDoc(doc(db, "owners", user.uid));
+    if (byUid.exists() && byUid.data()?.active !== false) return true;
+  } catch (_) {}
+  if (user.email) {
+    try {
+      const emailKey = user.email.trim().toLowerCase();
+      const byEmail = await getDoc(doc(db, "owners", emailKey));
+      if (byEmail.exists() && byEmail.data()?.active !== false) return true;
+    } catch (_) {}
+  }
+  return false;
+}
+
+window.signInWithGmailForRole = async function(role = "customer") {
+  const statusEl = role === "owner"
+    ? document.getElementById("otpStatusText")
+    : document.getElementById("custOtpStatus");
+
+  if (statusEl) {
+    statusEl.style.color = "#475569";
+    statusEl.innerText = "⏳ Gmail login khul raha hai...";
+  }
+
+  try {
+    sessionStorage.setItem("ats_gmail_role", role);
+    const result = await signInWithPopup(auth, googleProvider);
+    await completeGmailLogin(result.user, role);
+  } catch (err) {
+    if (err?.code === "auth/popup-blocked" || err?.code === "auth/operation-not-supported-in-this-environment") {
+      try {
+        await signInWithRedirect(auth, googleProvider);
+        return;
+      } catch (redirErr) {
+        const rCode = redirErr?.code || "unknown";
+        if (statusEl) {
+          statusEl.style.color = "#dc2626";
+          statusEl.innerText = `❌ Gmail Login Error (${rCode}): ${redirErr?.message || ""}`;
+        }
+        alert(`❌ Gmail Login Error (${rCode}): ${redirErr?.message || ""}`);
+      }
+      return;
+    }
+    const gCode = err?.code || "unknown";
+    if (statusEl) {
+      statusEl.style.color = "#dc2626";
+      statusEl.innerText = `❌ Gmail Login Error (${gCode}): ${err?.message || ""}`;
+    }
+    alert(`❌ Gmail Login Error (${gCode}): ${err?.message || ""}`);
+  }
+};
+
+async function completeGmailLogin(user, role) {
+  if (!user) return;
+  const email = (user.email || "").toLowerCase();
+  const displayName = user.displayName || "User";
+  const statusEl = role === "owner"
+    ? document.getElementById("otpStatusText")
+    : document.getElementById("custOtpStatus");
+
+  if (role === "owner") {
+    const authorized = await isOwnerByEmailOrUid(user);
+    if (!authorized) {
+      if (statusEl) {
+        statusEl.style.color = "#dc2626";
+        statusEl.innerText = `❌ ${email || "Yeh Gmail"} Owner list mein registered nahi hai.`;
+      }
+      return alert(`❌ ${email || "Yeh Gmail"} Firestore 'owners' collection mein registered nahi hai.`);
+    }
+    currentOwner = {
+      name: (document.getElementById("loginName")?.value || "").trim() || displayName,
+      email,
+      uid: user.uid
+    };
+    if (statusEl) {
+      statusEl.style.color = "#16a34a";
+      statusEl.innerText = `✅ Gmail verified (${email})`;
+    }
+    switchPortal("owner");
+    syncOwnerUI();
+    return;
+  }
+
+  const custNameInput = document.getElementById("custName");
+  if (custNameInput && !custNameInput.value.trim()) {
+    custNameInput.value = displayName;
+  }
+  if (statusEl) {
+    statusEl.style.color = "#16a34a";
+    statusEl.innerText = `✅ Gmail se login ho gaya: ${email}`;
+  }
+  openCustomerSubTab("services");
+}
+
+getRedirectResult(auth).then(async (res) => {
+  const savedRole = sessionStorage.getItem("ats_gmail_role") || "customer";
+  sessionStorage.removeItem("ats_gmail_role");
+  if (res && res.user) {
+    await completeGmailLogin(res.user, savedRole);
+  }
+}).catch(() => {});
 
 // ---------------- BM ACTIONS ----------------
 window.toggleBmRegPayoutFields = function() {
@@ -2208,6 +2333,12 @@ async function checkOwnerAuthorization(user, phone10) {
       if (d2.exists() && d2.data()?.active !== false) return true;
     } catch (_) {}
   }
+  if (user.email) {
+    try {
+      const d3 = await getDoc(doc(db, "owners", user.email.trim().toLowerCase()));
+      if (d3.exists() && d3.data()?.active !== false) return true;
+    } catch (_) {}
+  }
   return false;
 }
 
@@ -2244,17 +2375,17 @@ async function resolveRoleForAuthUser(user, preferredRole = null) {
 
   if (preferredRole === "owner") {
     if (isOwnerAuth) {
-      currentOwner = { name: (document.getElementById("loginName")?.value || "").trim() || "Owner", phone: authPhone10, uid: user.uid };
+      currentOwner = { name: (document.getElementById("loginName")?.value || "").trim() || user.displayName || "Owner", phone: authPhone10, email: user.email || "", uid: user.uid };
       syncOwnerUI();
     } else {
       document.getElementById("otpStatusText").style.color = "#dc2626";
-      document.getElementById("otpStatusText").innerText = "❌ Yeh number Owner list mein registered nahi hai.";
+      document.getElementById("otpStatusText").innerText = "❌ Yeh account Owner list mein registered nahi hai.";
     }
     return;
   }
   if (preferredRole === "worker") { activeWorker = workerData; syncWorkerUI(); return; }
   if (preferredRole === "bm") { activeBm = bmData; syncBmUI(); return; }
-  if (isOwnerAuth) { currentOwner = { name: (document.getElementById("loginName")?.value || "").trim() || "Owner", phone: authPhone10, uid: user.uid }; syncOwnerUI(); }
+  if (isOwnerAuth) { currentOwner = { name: (document.getElementById("loginName")?.value || "").trim() || user.displayName || "Owner", phone: authPhone10, email: user.email || "", uid: user.uid }; syncOwnerUI(); }
   if (workerData) { activeWorker = workerData; syncWorkerUI(); }
   if (bmData) { activeBm = bmData; syncBmUI(); }
 }
